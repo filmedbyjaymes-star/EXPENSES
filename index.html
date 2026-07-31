@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jaymes Finance Dashboard 2026</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.5.0/dist/chart.umd.js" crossorigin="anonymous"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#2a2a2a;font-size:14px}
+.hdr{padding:16px 24px 0;display:flex;justify-content:space-between;align-items:flex-start;background:#fff;border-bottom:1px solid #e6e4dd}
+.htitle{font-size:18px;font-weight:700}.hsub{font-size:11px;color:#8a857a;margin-top:2px}
+.hbadge{font-size:11px;text-align:right;line-height:1.8;padding-top:4px}
+.nav{display:flex;padding:0 20px;background:#fff;border-bottom:2px solid #e6e4dd;overflow-x:auto;gap:0}
+.tbtn{padding:8px 12px;font-size:12px;font-weight:500;color:#8a857a;background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;transition:color .15s}
+.tbtn:hover{color:#2f6f4e}
+.tbtn.active{color:#2f6f4e;border-bottom-color:#2f6f4e;font-weight:700}
+.panel{display:none;padding:18px 24px 40px;max-width:1000px}
+.panel.active{display:block}
+.card{background:#fff;border:1px solid #e6e4dd;border-radius:10px;padding:16px;margin-bottom:14px}
+.ct{font-size:10px;font-weight:700;color:#8a857a;letter-spacing:.6px;text-transform:uppercase;margin-bottom:12px}
+.pills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.pill{padding:4px 13px;border-radius:999px;border:1px solid #d1cfc8;background:#fff;font-size:12px;cursor:pointer;color:#5a5a5a}
+.pill.active{background:#2f6f4e;color:#fff;border-color:#2f6f4e}
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.kcard{background:#fff;border:1px solid #e6e4dd;border-radius:10px;padding:14px}
+.klbl{font-size:10px;font-weight:700;color:#8a857a;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.kval{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.kval.g{color:#2f6f4e}.kval.r{color:#b8423a}.kval.b{color:#0891b2}.ksub{font-size:10px;color:#8a857a;margin-top:2px}
+.inc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.inc-cl{background:#e3eef6;border:1px solid #a8c8e0;border-radius:10px;padding:14px}
+.inc-umsc{background:#fbe9d8;border:1px solid #f0c99a;border-radius:10px;padding:14px}
+.inc-lbl{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px}
+.inc-cl .inc-lbl{color:#3c6c8a}.inc-umsc .inc-lbl{color:#b86a2b}
+.inc-val{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.inc-cl .inc-val{color:#3c6c8a}.inc-umsc .inc-val{color:#b86a2b}
+.inc-note{font-size:11px;margin-top:4px;opacity:.75}
+.srow{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center}
+.sleg{list-style:none;display:flex;flex-direction:column;gap:5px}
+.sleg li{display:flex;align-items:center;gap:8px;font-size:12px}
+.sw{width:9px;height:9px;border-radius:2px;flex-shrink:0}.slbl{flex:1}.samt{font-variant-numeric:tabular-nums;color:#5a5a5a}
+.ti{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f0ede8}
+.ti:last-child{border-bottom:none}
+.ti-main{font-size:13px;font-weight:500}.ti-sub{font-size:11px;color:#8a857a;margin-top:1px}
+.sv-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.sv-y{background:#f5edcf;border:1px solid #e8d89a;border-radius:10px;padding:14px}
+.sv-g{background:#e1efe6;border:1px solid #a8d5b5;border-radius:10px;padding:14px}
+.sv-lbl{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin-bottom:6px}
+.sv-lbl.y{color:#c89b1e}.sv-lbl.g{color:#2f6f4e}
+.sv-amt{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;margin-bottom:8px}
+.sv-amt.y{color:#c89b1e}.sv-amt.g{color:#2f6f4e}
+.sv-inp{width:100%;border:1px solid #d1cfc8;border-radius:6px;padding:5px 8px;font-size:12px;background:#fff}
+.ann{font-size:12px;color:#5a5a5a;margin-bottom:14px}
+.c{padding:10px 13px;border-radius:6px;margin-bottom:7px;font-size:13px;border-left:3px solid;line-height:1.5}
+.c.bad{border-color:#b8423a;background:#fbe7e3;color:#5a1f1c}
+.c.good{border-color:#2f6f4e;background:#e1efe6;color:#173b29}
+.c.warn{border-color:#b86a2b;background:#fbe9d8;color:#5a3617}
+.c.info{border-color:#3c6c8a;background:#e3eef6;color:#1c3a4f}
+.c.urg{border-color:#b8423a;background:#fbe7e3;color:#5a1f1c;font-weight:600}
+.vf{margin:24px auto 10px;padding:12px 18px;border-top:1px solid #e6e4dd;text-align:center;color:#8a857a;font-style:italic;font-size:12px;line-height:1.6}
+.vf .vr{margin:4px 0 0;font-style:normal;font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:#aaa39a}
+.is-ttl{font-size:10px;font-weight:700;color:#8a857a;letter-spacing:.5px;text-transform:uppercase;margin:14px 0 7px}
+.rbtn{background:#2f6f4e;color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer}
+.frow{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:10px}
+.sinp{border:1px solid #d1cfc8;border-radius:6px;padding:5px 9px;font-size:12px;width:160px}
+.sdd{border:1px solid #d1cfc8;border-radius:6px;padding:5px 8px;font-size:12px;background:#fff}
+.tt{width:100%;border-collapse:collapse;font-size:12px}
+.tt th{padding:7px 8px;text-align:left;font-size:10px;font-weight:700;color:#8a857a;text-transform:uppercase;letter-spacing:.4px;cursor:pointer;white-space:nowrap;border-bottom:2px solid #e6e4dd}
+.tt td{padding:8px 8px;border-bottom:1px solid #f0ede8;vertical-align:middle}
+.tt tr:hover td{background:#fafaf7}
+.dcol{color:#8a857a;white-space:nowrap;width:58px}
+.descol{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acol{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.acol.neg{color:#b8423a}.acol.pos{color:#2f6f4e}
+.csel{border:1px solid #d1cfc8;border-radius:5px;padding:3px 5px;font-size:11px;background:#fff;max-width:140px}
+.ssel{border:1px solid #d1cfc8;border-radius:5px;padding:3px 5px;font-size:11px;background:#fff;min-width:100px}
+.ssel[data-s="could cancel"]{background:#f5edcf}
+.ssel[data-s="cancelled"]{background:#e1efe6}
+.empty{text-align:center;color:#8a857a;padding:32px}
+.ss-top{background:#fff;border:1px solid #e6e4dd;border-radius:10px;padding:16px;margin-bottom:14px}
+.ss-big{font-size:32px;font-weight:700;color:#2f6f4e;font-variant-numeric:tabular-nums}
+.ss-stitle{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #e6e4dd}
+.ss-stitle.cut{color:#b8423a}.ss-stitle.red{color:#b86a2b}.ss-stitle.watch{color:#3c6c8a}.ss-stitle.keep{color:#2f6f4e}
+.ss-item{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #f0ede8}
+.ss-item:last-child{border-bottom:none}
+.ss-left{flex:1}.ss-cat{font-size:13px;font-weight:600}.ss-spent{font-size:11px;color:#8a857a;margin-top:1px}
+.ss-tip{font-size:11px;color:#5a5a5a;margin-top:3px}
+.ss-right{text-align:right;flex-shrink:0;min-width:70px}
+.ss-save{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}.ss-slbl{font-size:10px;color:#8a857a}
+.gr{margin-bottom:14px}
+.gh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:5px}
+.gn{font-size:13px;font-weight:600}.ga{font-size:12px;color:#8a857a;font-variant-numeric:tabular-nums}
+.gbg{background:#e6e4dd;border-radius:999px;height:10px;overflow:hidden;margin-bottom:4px}
+.gfill{height:100%;border-radius:999px}.gnote{font-size:11px;color:#8a857a}.gpct{font-size:11px;font-weight:700;color:#2f6f4e}
+.dc{border-radius:10px;padding:14px;margin-bottom:10px}
+.dc.urg{background:#fbe7e3;border:1px solid #e8a8a2}.dc.norm{background:#fff;border:1px solid #e6e4dd}
+.dn{font-size:13px;font-weight:700;margin-bottom:6px}
+.dbg{background:#e6e4dd;border-radius:999px;height:8px;overflow:hidden;margin:6px 0}
+.dfill{height:100%;border-radius:999px;background:#b8423a}
+.damts{display:flex;justify-content:space-between;font-size:11px;color:#8a857a;font-variant-numeric:tabular-nums}
+.dnote{font-size:11px;margin-top:5px}
+.mvmt{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.ntile{padding:7px 14px;border-radius:8px;font-size:12px;font-weight:600;min-width:80px;text-align:center}
+.ntile.pos{background:#e1efe6;color:#2f6f4e}.ntile.neg{background:#fbe7e3;color:#b8423a}
+.cpills{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.cpill{padding:4px 11px;border-radius:999px;border:1px solid #d1cfc8;background:#fff;font-size:11px;cursor:pointer;color:#5a5a5a}
+.cpill.active{background:#2f6f4e;color:#fff;border-color:#2f6f4e}
+.btiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.bt{padding:14px 16px;border-radius:10px}
+.bt.g{background:#e1efe6;border:1px solid #a8d5b5}.bt.p{background:#fbe9d8;border:1px solid #f0c99a}.bt.r2{background:#fbe7e3;border:1px solid #e8a8a2}
+.bt-lbl{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;margin-bottom:4px}
+.bt.g .bt-lbl{color:#2f6f4e}.bt.p .bt-lbl{color:#b86a2b}.bt.r2 .bt-lbl{color:#b8423a}
+.bt-n{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums}
+.bt.g .bt-n{color:#2f6f4e}.bt.p .bt-n{color:#b86a2b}.bt.r2 .bt-n{color:#b8423a}
+.btt{width:100%;border-collapse:collapse;font-size:12px}
+.btt th{padding:7px 8px;text-align:left;font-size:10px;font-weight:700;color:#8a857a;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid #e6e4dd;white-space:nowrap}
+.btt td{padding:7px 8px;border-bottom:1px solid #f0ede8;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bi{width:65px;border:1px solid #d1cfc8;border-radius:4px;padding:3px 5px;font-size:11px}
+.pb{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;color:#fff;white-space:nowrap}
+.pb.g{background:#2f6f4e}.pb.o{background:#b86a2b}.pb.r{background:#b8423a}
+.b-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.bscard{border-radius:10px;padding:14px;text-align:center}
+.bscard.paid{background:#e1efe6;border:1px solid #a8d5b5}
+.bscard.due{background:#fbe7e3;border:1px solid #e8a8a2}
+.bscard.skip{background:#f5f5f0;border:1px solid #e6e4dd}
+.bsn{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.bscard.paid .bsn{color:#2f6f4e}.bscard.due .bsn{color:#b8423a}.bscard.skip .bsn{color:#8a857a}
+.bslbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.bscard.paid .bslbl{color:#2f6f4e}.bscard.due .bslbl{color:#b8423a}.bscard.skip .bslbl{color:#8a857a}
+.bfilt{display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap}
+.bfbtn{padding:5px 14px;border-radius:99px;border:1px solid #d1cfc8;background:#fff;font-size:12px;cursor:pointer;color:#5a5a5a;font-weight:500}
+.bfbtn.active{background:#2f6f4e;color:#fff;border-color:#2f6f4e}
+.blist{display:flex;flex-direction:column;gap:4px}
+.brow{display:flex;align-items:center;gap:12px;padding:9px 12px;border-radius:8px;background:#fff;border:1px solid #eee;transition:opacity .15s}
+.brow.urg-r{background:#fff8f7;border-color:#e8a8a2}
+.brow.paid-r{opacity:.45}
+.bchk{width:16px;height:16px;flex-shrink:0;cursor:pointer;accent-color:#2f6f4e}
+.bname{flex:1;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bdue{font-size:11px;color:#8a857a;white-space:nowrap;min-width:65px}
+.bamt{font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right;min-width:55px}
+.btag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:10px;font-weight:700;white-space:nowrap}
+.btag.urg{background:#fbe7e3;color:#b8423a}.btag.nec{background:#e1efe6;color:#2f6f4e}
+.btag.opt{background:#f5f5f0;color:#8a857a}.btag.biz{background:#e3eef6;color:#3c6c8a}
+.btag.dbt{background:#fbe9d8;color:#b86a2b}.btag.def{background:#f5f5f0;color:#8a857a}
+.btag.ot{background:#f5f5f0;color:#8a857a}.btag.ov{background:#fbe7e3;color:#b8423a}
+.bstat-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.bstat-dot.p{background:#2f6f4e}.bstat-dot.n{background:#b8423a}.bstat-dot.s{background:#d1cfc8}
+.funnel{display:flex;flex-direction:column;gap:5px;margin-bottom:20px}
+.fstep{display:flex;align-items:stretch;border-radius:8px;overflow:hidden;border:1px solid #e6e4dd}
+.fnum{width:34px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0}
+.fnum.grn{background:#2f6f4e}.fnum.red{background:#b8423a}.fnum.orn{background:#b86a2b}.fnum.pur{background:#9333ea}
+.fcon{flex:1;padding:9px 13px;background:#fff}
+.ftitle{font-size:13px;font-weight:600;margin-bottom:1px}
+.famount{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;color:#2f6f4e}
+.famount.red{color:#b8423a}.famount.orn{color:#b86a2b}.famount.pur{color:#9333ea}
+.fsub{font-size:11px;color:#8a857a;margin-top:1px}
+.env-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}
+.env{border-radius:10px;padding:13px;text-align:center;border:2px dashed}
+.env.g{background:#e1efe6;border-color:#a8d5b5}.env.b{background:#e3eef6;border-color:#a8c8e0}
+.env.p{background:#fbf7ff;border-color:#d4b0f0}.env.y{background:#f5edcf;border-color:#e8d89a}
+.env-icon{font-size:20px;margin-bottom:4px}
+.env-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px}
+.env.g .env-name{color:#2f6f4e}.env.b .env-name{color:#3c6c8a}.env.p .env-name{color:#9333ea}.env.y .env-name{color:#c89b1e}
+.env-amt{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+.env.g .env-amt{color:#2f6f4e}.env.b .env-amt{color:#3c6c8a}.env.p .env-amt{color:#9333ea}.env.y .env-amt{color:#c89b1e}
+.env-note{font-size:10px;color:#8a857a;margin-top:2px;line-height:1.3}
+.fe-row{display:flex;align-items:center;gap:12px;padding:11px 13px;border-radius:8px;background:#fff;border:1px solid #e6e4dd;margin-bottom:6px}
+.fe-icon{font-size:18px;flex-shrink:0}.fe-info{flex:1}
+.fe-name{font-size:13px;font-weight:600}.fe-why{font-size:11px;color:#5a5a5a;margin-top:1px}
+.fe-right{text-align:right;flex-shrink:0}
+.fe-amt{font-size:14px;font-weight:700;color:#2f6f4e;font-variant-numeric:tabular-nums}
+.fe-freq{font-size:10px;color:#8a857a}
+.fe-pri{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;margin-top:4px}
+.fe-pri.h{background:#e1efe6;color:#2f6f4e}.fe-pri.l{background:#f5f5f0;color:#8a857a}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2f6f4e;color:#fff;padding:9px 18px;border-radius:8px;font-size:12px;z-index:999;display:none;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div><div class="htitle">Jaymes Finance Dashboard</div><div class="hsub">2026 &mdash; Apr / May / Jun / Jul / Aug</div></div>
+  <div class="hbadge">
+    <span style="color:#b8423a;font-weight:700">&#9888; TAXES acct = $0.00 &mdash; transfer now</span><br>
+    <span style="color:#8a857a">Tax 25% &middot; Tithe 5% &middot; Savings 30%</span>
+  </div>
+</div>
+<nav class="nav">
+  <button class="tbtn active" data-tab="overview">Overview</button>
+  <button class="tbtn" data-tab="bills">Bills &amp; Funnel</button>
+  <button class="tbtn" data-tab="super-savings">Super Savings</button>
+  <button class="tbtn" data-tab="transactions">Transactions</button>
+  <button class="tbtn" data-tab="goals-debt">Goals &amp; Debt</button>
+  <button class="tbtn" data-tab="month-vs-month">Month vs Month</button>
+  <button class="tbtn" data-tab="budget">Budget</button>
+  <button class="tbtn" data-tab="insights">Insights</button>
+</nav>
+
+<div id="overview" class="panel active">
+  <div class="pills" id="ov-months"></div>
+  <div style="background:#fbe7e3;border:1px solid #e8a8a2;border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:#5a1f1c">
+    <strong>TAXES account (****0021) = $0.00.</strong> Transfer 25% of each Colonial Life check the same day it lands.
+  </div>
+  <div class="inc-grid">
+    <div class="inc-cl"><div class="inc-lbl">Colonial Life (1099)</div><div class="inc-val" id="cl-val">$0.00</div><div class="inc-note" id="cl-note">Self-employed income</div></div>
+    <div class="inc-umsc"><div class="inc-lbl">UMSC College (W-2)</div><div class="inc-val" style="color:#b86a2b">$0.00*</div><div class="inc-note">*Starting Aug 2026. $920/mo projected. W-2 taxes withheld automatically.</div></div>
+  </div>
+  <div class="kgrid">
+    <div class="kcard"><div class="klbl">Income</div><div class="kval g" id="k-inc">$0.00</div><div class="ksub">this month</div></div>
+    <div class="kcard"><div class="klbl">Spent</div><div class="kval r" id="k-sp">$0.00</div><div class="ksub">all expenses</div></div>
+    <div class="kcard"><div class="klbl">Net</div><div class="kval" id="k-net">$0.00</div><div class="ksub">income minus spend</div></div>
+    <div class="kcard"><div class="klbl">Tax Set-Aside</div><div class="kval b" id="k-tax">$0.00</div><div class="ksub">25% to TAXES acct</div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+    <div class="card"><div class="ct">SPENDING BY CATEGORY</div>
+      <div class="srow">
+        <div style="position:relative;height:240px"><canvas id="donut"></canvas></div>
+        <ul class="sleg" id="sleg"></ul>
+      </div>
+    </div>
+    <div class="card"><div class="ct">TRANSFERS TO MAKE</div><div id="tlist"></div></div>
+  </div>
+  <div class="sv-row">
+    <div class="sv-y"><div class="sv-lbl y">COULD CANCEL</div><div class="sv-amt y" id="sv-could">$0.00</div></div>
+    <div class="sv-g"><div class="sv-lbl g">ALREADY CANCELLED</div><div class="sv-amt g" id="sv-cxd">$0.00</div></div>
+  </div>
+  <div class="is-ttl" id="ov-ins-lbl">INSIGHTS</div>
+  <div id="ov-ins"></div>
+  <footer class="vf"><p>"But seek first his kingdom and his righteousness, and all these things will be given to you as well."</p><p class="vr">Matthew 6:33</p></footer>
+</div>
+
+<div id="bills" class="panel">
+  <div class="b-summary" id="bills-stats"></div>
+  <div class="bfilt">
+    <button class="bfbtn active" data-bf="all">All</button>
+    <button class="bfbtn" data-bf="due">Still Due</button>
+    <button class="bfbtn" data-bf="nec">Necessary</button>
+    <button class="bfbtn" data-bf="opt">Optional</button>
+  </div>
+  <div class="blist" id="bills-body"></div>
+  <div style="margin:20px 0 10px"><div style="font-size:15px;font-weight:700">Money Funnel</div><div style="font-size:12px;color:#8a857a;margin-top:2px">Every paycheck, follow this order.</div></div>
+  <div class="funnel" id="funnel-steps"></div>
+  <div style="margin:4px 0 10px"><div style="font-size:15px;font-weight:700">Cash Envelopes</div></div>
+  <div class="env-grid">
+    <div class="env g"><div class="env-icon">&#9981;</div><div class="env-name">Gas</div><div class="env-amt">$60</div><div class="env-note">Every 2 weeks. ARCO/Costco.</div></div>
+    <div class="env b"><div class="env-icon">&#128717;</div><div class="env-name">Groceries</div><div class="env-amt">$75</div><div class="env-note">Aldi or Smart &amp; Final.</div></div>
+    <div class="env p"><div class="env-icon">&#129309;</div><div class="env-name">Manny</div><div class="env-amt">$100</div><div class="env-note">$751.85 remaining.</div></div>
+    <div class="env y"><div class="env-icon">&#128176;</div><div class="env-name">Personal</div><div class="env-amt">$40</div><div class="env-note">Empty = done spending.</div></div>
+    <div class="env y"><div class="env-icon">&#128173;</div><div class="env-name">Emergency</div><div class="env-amt">$50</div><div class="env-note">Touch only if urgent.</div></div>
+    <div class="env b"><div class="env-icon">&#127981;</div><div class="env-name">Auto Goal</div><div class="env-amt">$50</div><div class="env-note">Toward $1,200 car repair.</div></div>
+  </div>
+  <div style="background:#fff;border:1px solid #e6e4dd;border-radius:10px;padding:13px;display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+    <div style="font-size:10px;font-weight:700;color:#8a857a;text-transform:uppercase;letter-spacing:.5px">Total Cash to Withdraw</div>
+    <div style="font-size:26px;font-weight:700;color:#2f6f4e">$375</div>
+  </div>
+  <div style="font-size:15px;font-weight:700;margin-bottom:10px">Future Expenses</div>
+  <div id="future-list"></div>
+  <footer class="vf"><p>"The plans of the diligent lead to profit as surely as haste leads to poverty."</p><p class="vr">Proverbs 21:5</p></footer>
+</div>
+
+<div id="super-savings" class="panel">
+  <div class="ss-top"><div class="ct">SUPER SAVINGS &mdash; JUNE 2026</div>
+    <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:4px">
+      <div class="ss-big" id="ss-total">$0.00</div>
+      <div style="font-size:13px;color:#8a857a">/month &rarr; <strong id="ss-yr">$0.00</strong>/year if all cuts made</div>
+    </div>
+  </div>
+  <div class="card"><div class="ss-stitle cut">CUT THESE</div><div id="ss-cut"></div></div>
+  <div class="card"><div class="ss-stitle red">REDUCE THESE</div><div id="ss-reduce"></div></div>
+  <div class="card"><div class="ss-stitle watch">WATCH / REVIEW</div><div id="ss-watch"></div></div>
+  <div class="card"><div class="ss-stitle keep">KEEP THESE</div><div id="ss-keep"></div></div>
+  <footer class="vf"><p>"The plans of the diligent lead to profit as surely as haste leads to poverty."</p><p class="vr">Proverbs 21:5</p></footer>
+</div>
+
+<div id="transactions" class="panel">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+    <div><div style="font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase">TRANSACTIONS</div></div>
+    <button class="rbtn" id="rbtn">Export overrides.json</button>
+  </div>
+  <div class="pills frow" id="txn-pills"></div>
+  <div class="frow">
+    <input class="sinp" type="text" id="txn-search" placeholder="Search...">
+    <select class="sdd" id="txn-sf"><option value="All">All</option><option value="Blank only">Blank</option><option value="Could cancel">Could cancel</option><option value="Cancelled">Cancelled</option></select>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="tt">
+    <thead><tr>
+      <th data-col="date">Date</th><th data-col="desc">Description</th>
+      <th data-col="category">Category</th><th data-col="amount" style="text-align:right">Amount</th>
+      <th data-col="status">Status</th>
+    </tr></thead>
+    <tbody id="txn-body"></tbody>
+  </table>
+  </div>
+  <div class="empty" id="txn-empty" style="display:none">No transactions match.</div>
+  <footer class="vf"><p>"Each of you should give what you have decided in your heart to give..."</p><p class="vr">2 Corinthians 9:7</p></footer>
+</div>
+
+<div id="goals-debt" class="panel">
+  <div class="card"><div class="ct">SAVINGS GOALS</div><div id="glist"></div></div>
+  <div class="card"><div class="ct">DEBT TRACKER</div>
+    <div class="c urg" style="margin-bottom:12px">Mastercard ****7580: $494.70/$500 (98.9%). Min $15 due Aug 2.</div>
+    <div id="dlist"></div>
+  </div>
+  <div class="card"><div class="ct">TAX &amp; INCOME PLAN</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      <div style="background:#fbe7e3;border:1px solid #e8a8a2;border-radius:10px;padding:14px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#b8423a;margin-bottom:4px">TAXES ACCOUNT ****0021</div>
+        <div style="font-size:26px;font-weight:700;color:#b8423a">$0.00</div>
+        <div style="font-size:11px;color:#5a1f1c;margin-top:4px">Need ~$362 YTD. Transfer 25% of each paycheck immediately.</div>
+      </div>
+      <div style="background:#e3eef6;border:1px solid #a8c8e0;border-radius:10px;padding:14px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#3c6c8a;margin-bottom:4px">MILEAGE DEDUCTION</div>
+        <div style="font-size:26px;font-weight:700;color:#3c6c8a">$479.00</div>
+        <div style="font-size:11px;color:#3c6c8a;margin-top:4px;opacity:.8">642.4 mi x $0.745. Send receipts folder at year-end.</div>
+      </div>
+    </div>
+    <div class="c info">Colonial Life YTD: $1,446.99. After mileage deduction: ~$968 taxable. Est. tax: ~$242.</div>
+    <div class="c warn" style="margin-top:8px">UMSC: $920/mo starting August. W-2 taxes withheld automatically.</div>
+  </div>
+  <footer class="vf"><p>"The rich rule over the poor, and the borrower is slave to the lender."</p><p class="vr">Proverbs 22:7</p></footer>
+</div>
+
+<div id="month-vs-month" class="panel">
+  <div class="card" style="margin-bottom:14px"><div class="ct">INCOME VS SPEND</div>
+    <div style="position:relative;height:300px"><canvas id="mvm"></canvas></div>
+    <div class="mvmt" id="mvm-tiles"></div>
+  </div>
+  <div class="card"><div class="ct">CATEGORY TREND</div>
+    <div class="cpills" id="cpills"></div>
+    <div style="position:relative;height:250px"><canvas id="catc"></canvas></div>
+  </div>
+  <footer class="vf"><p>"Dishonest money dwindles away, but whoever gathers money little by little makes it grow."</p><p class="vr">Proverbs 13:11</p></footer>
+</div>
+
+<div id="budget" class="panel">
+  <div class="btiles">
+    <div class="bt g"><div class="bt-lbl">On Track</div><div class="bt-n" id="bt-on">0</div></div>
+    <div class="bt p"><div class="bt-lbl">Watch It</div><div class="bt-n" id="bt-w">0</div></div>
+    <div class="bt r2"><div class="bt-lbl">Over Budget</div><div class="bt-n" id="bt-ov">0</div></div>
+  </div>
+  <div style="overflow-x:auto"><table class="btt"><thead><tr id="bh"></tr></thead><tbody id="bb"></tbody></table></div>
+  <footer class="vf"><p>"Honor the Lord with your wealth, with the firstfruits of all your crops."</p><p class="vr">Proverbs 3:9-10</p></footer>
+</div>
+
+<div id="insights" class="panel">
+  <div id="ins-content"></div>
+  <footer class="vf"><p>"And my God will meet all your needs according to the riches of his glory in Christ Jesus."</p><p class="vr">Philippians 4:19</p></footer>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function() {
+var DATA={"monthOrder":["Apr","May","Jun","Jul","Aug"],"months":{"Apr":{"transactions":[{"date":"Apr 29","sortDate":"2026-04-29","rawDescription":"POS DENNY'S #6780 RIVERSIDE CA RIVERSIDE O","displayDescription":"Denny's","category":"Restaurants","amount":-24.49,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 28","sortDate":"2026-04-28","rawDescription":"THE POKE PLACE RANCHO CUCAMO CA","displayDescription":"The Poke Place Rancho","category":"Restaurants","amount":-45.14,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 28","sortDate":"2026-04-28","rawDescription":"Spotify USA New York NY 45 W. 18th StOeet","displayDescription":"Spotify","category":"Subscriptions","amount":-12.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 28","sortDate":"2026-04-28","rawDescription":"VONS #1914 RANCHO CUCAMO CA 6351 HAVEO","displayDescription":"Vons","category":"Groceries","amount":-6.49,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 27","sortDate":"2026-04-27","rawDescription":"UEP*WAKE CAFE UPLAND CA 1630 W FOOTHIOL","displayDescription":"Uep Wake Cafe Upland Ca W F...","category":"Coffee Shops","amount":-17.22,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 26","sortDate":"2026-04-26","rawDescription":"ALEBRIJES BAKERY #3 ONTARIO CA 1232 EOST","displayDescription":"Alebrijes Bakery","category":"Bakery & Treats","amount":-17.88,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 26","sortDate":"2026-04-26","rawDescription":"AMC 0237 VICTORIA GARD RANCHO CUCAMO OA","displayDescription":"AMC Theatres","category":"Recreation","amount":-10.29,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 26","sortDate":"2026-04-26","rawDescription":"TST* BONE &amp; BROTH        ONTARIO      CA","displayDescription":"Bone & Broth","category":"Restaurants","amount":-48.17,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Apr","year":2026,"pending":true},{"date":"Apr 24","sortDate":"2026-04-24","rawDescription":"APPLE CASH SENT MONEY CUPERTINO CA 1","displayDescription":"Apple","category":"Personal Care","amount":-35.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 24","sortDate":"2026-04-24","rawDescription":"WM SUPERCENTER #5691 UPLAND CA 1445","displayDescription":"Walmart","category":"Business Expense","amount":-14.16,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 24","sortDate":"2026-04-24","rawDescription":"76 - GLASSELL FUEL LLC   ORANGE       CA","displayDescription":"76 Fuel","category":"Gas","amount":-67.67,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Apr","year":2026,"pending":true},{"date":"Apr 23","sortDate":"2026-04-23","rawDescription":"CLAUDE.AI SUBSCRIPTION SAN FRANCISCO OA","displayDescription":"Claude.ai Subscription","category":"Business Expense","amount":-20.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 23","sortDate":"2026-04-23","rawDescription":"VONS FUEL2681 UPLAND CA 81 WEST FOOTHOLL","displayDescription":"Vons Fuel","category":"Groceries","amount":-15.23,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 22","sortDate":"2026-04-22","rawDescription":"TARGET        00018341   UPLAND       CA","displayDescription":"Target","category":"Shopping","amount":-21.54,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Apr","year":2026,"pending":true},{"date":"Apr 21","sortDate":"2026-04-21","rawDescription":"DROPBOX*61RPNQDS8VPQ SAN FRANCISCO CAO185","displayDescription":"Dropbox","category":"Business Expense","amount":-11.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 21","sortDate":"2026-04-21","rawDescription":"CARDENAS MARKETS ONTARIO CA 2450 S","displayDescription":"Cardenas Market","category":"Groceries","amount":-9.49,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 17","sortDate":"2026-04-17","rawDescription":"APPLE.COM/BILL CUPERTINO CA ONE APPLEOPARK","displayDescription":"Apple","category":"Subscriptions","amount":-2.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 16","sortDate":"2026-04-16","rawDescription":"POS AUTOZONE 05619 ONTARIO CA 1881 E 4TH O","displayDescription":"AutoZone","category":"Auto Maintenance","amount":-38.05,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 14","sortDate":"2026-04-14","rawDescription":"APPLE CASH SENT MONEY CUPERTINO CA 1","displayDescription":"Apple","category":"Personal Care","amount":-150.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 14","sortDate":"2026-04-14","rawDescription":"POS ALIRA FUEL MART ONTARIO CA ONTARIO   O","displayDescription":"Alira Fuel Mart","category":"Fast Food","amount":-10.58,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 14","sortDate":"2026-04-14","rawDescription":"POS STATERBROS073 MONTCLAIR CA 9575 CENTRO","displayDescription":"Stater Bros","category":"Groceries","amount":-23.97,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 13","sortDate":"2026-04-13","rawDescription":"POS DOLLARTREE RANCHO CUCAMO CA 9008 FOOTO","displayDescription":"Dollar Tree","category":"Shopping","amount":-5.93,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 12","sortDate":"2026-04-12","rawDescription":"POS STATERBROS085 ONTARIO CA 1939 E 4TH SO","displayDescription":"Stater Bros","category":"Groceries","amount":-10.98,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 11","sortDate":"2026-04-11","rawDescription":"POS ALIRA FUEL MART ONTARIO CA 1155 N GROO","displayDescription":"Alira Fuel Mart Ontario Ca ...","category":"Gas","amount":-20.58,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 9","sortDate":"2026-04-09","rawDescription":"HAPPY WATER ONTARIO CA 1947 E 4TH ST O","displayDescription":"Happy Water","category":"Groceries","amount":-6.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 9","sortDate":"2026-04-09","rawDescription":"POS SMART AND FINAL ONTARIO CA ONTARIO   O","displayDescription":"Smart & Final","category":"Groceries","amount":-3.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 8","sortDate":"2026-04-08","rawDescription":"ALEBRIJES BAKERY #3 ONTARIO CA 1232 EOST","displayDescription":"Alebrijes Bakery","category":"Bakery & Treats","amount":-11.92,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 7","sortDate":"2026-04-07","rawDescription":"24 HOUR FITNESS - 165 UPLAND CA 685","displayDescription":"24 Hour Fitness","category":"Gym","amount":-5.38,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 7","sortDate":"2026-04-07","rawDescription":"POS STATERBROS085 ONTARIO CA 1939 E 4TH SO","displayDescription":"Stater Bros","category":"Groceries","amount":-4.49,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 7","sortDate":"2026-04-07","rawDescription":"Interest Charge on Purchases","displayDescription":"Interest Charge","category":"Bank Fees","amount":-6.67,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Apr","year":2026,"pending":true},{"date":"Apr 6","sortDate":"2026-04-06","rawDescription":"SQ *CAFE TRES MORENO VALLEY CA 24578","displayDescription":"Cafe Tres Moreno Valley Ca","category":"Coffee Shops","amount":-7.34,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 4","sortDate":"2026-04-04","rawDescription":"IN-N-OUT POMONA POMONA CA 1851 INDIANOHILL","displayDescription":"In-N-Out","category":"Fast Food","amount":-19.45,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 3","sortDate":"2026-04-03","rawDescription":"POS ALIRA FUEL MART ONTARIO CA 1155 N GROO","displayDescription":"Alira Fuel Mart Ontario Ca ...","category":"Gas","amount":-20.58,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false},{"date":"Apr 3","sortDate":"2026-04-03","rawDescription":"POS ALDI 79118 UPLAND CA UPLAND          O","displayDescription":"Aldi","category":"Groceries","amount":-48.59,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false}],"income":[{"date":"Apr 22","sortDate":"2026-04-22","rawDescription":"ATM SCHOOLSFIRST UPLAND CA 1895 N.CAMPUS Y","displayDescription":"ATM Deposit at Upland, Cali...","category":"Income","amount":11.0,"type":"Credit","account":"PERSONAL CHECKING","status":"","month":"Apr","year":2026,"pending":false}]},"May":{"transactions":[{"date":"May 31","sortDate":"2026-05-31","rawDescription":"ABC*7476-EOS FITNESS MONTCLAIR CA 515O","displayDescription":"EOS Fitness","category":"Gym","amount":-69.98,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 29","sortDate":"2026-05-29","rawDescription":"85C BAKERY CAFE USA      CLAREMONT    CA","displayDescription":"85C Bakery","category":"Bakery & Treats","amount":-15.05,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 29","sortDate":"2026-05-29","rawDescription":"SHELL OIL 57445636509    CLAREMONT    CA","displayDescription":"Shell","category":"Gas","amount":-70.35,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 28","sortDate":"2026-05-28","rawDescription":"MCDONALDS 3506           ONTARIO      CA","displayDescription":"McDonald's","category":"Fast Food","amount":-9.79,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 27","sortDate":"2026-05-27","rawDescription":"WINGSTOP 1406            ONTARIO      CA","displayDescription":"Wingstop","category":"Fast Food","amount":-10.54,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 26","sortDate":"2026-05-26","rawDescription":"APPLE CASH SENT MONEY CUPERTINO CA 1","displayDescription":"Apple","category":"Personal Care","amount":-4.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 26","sortDate":"2026-05-26","rawDescription":"IN-N-OUT RIVERSIDE 3     RIVERSIDE    CA","displayDescription":"In-N-Out","category":"Fast Food","amount":-9.52,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 25","sortDate":"2026-05-25","rawDescription":"Dropbox JCWN32KZYVP8 San Francisco CAO185","displayDescription":"Dropbox","category":"Business Expense","amount":-11.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 23","sortDate":"2026-05-23","rawDescription":"STATERBROS045            UPLAND       CA","displayDescription":"Stater Bros","category":"Groceries","amount":-5.49,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 23","sortDate":"2026-05-23","rawDescription":"IN-N-OUT EASTVALE        EASTVALE     CA","displayDescription":"In-N-Out","category":"Fast Food","amount":-9.43,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 22","sortDate":"2026-05-22","rawDescription":"STATERBROS 204           ONTARIO      CA","displayDescription":"Stater Bros","category":"Groceries","amount":-16.0,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 21","sortDate":"2026-05-21","rawDescription":"ALEBRIJES BAKERY #3      ONTARIO      CA","displayDescription":"Alebrijes Bakery","category":"Bakery & Treats","amount":-9.32,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 21","sortDate":"2026-05-21","rawDescription":"H K FOOD STORE           ONTARIO      CA","displayDescription":"H K Food Store","category":"Bakery & Treats","amount":-6.5,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 21","sortDate":"2026-05-21","rawDescription":"TST* BAQBA MEXICAN GRI   MONTCLAIR    CA","displayDescription":"Baqba Mexican","category":"Restaurants","amount":-21.15,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 17","sortDate":"2026-05-17","rawDescription":"APPLE CASH SENT MONEY CUPERTINO CA 1","displayDescription":"Apple","category":"Personal Care","amount":-34.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 16","sortDate":"2026-05-16","rawDescription":"POS ALIRA FUEL MART ONTARIO CA ONTARIO   O","displayDescription":"Alira Fuel Mart","category":"Gas","amount":-60.75,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 16","sortDate":"2026-05-16","rawDescription":"APPLE.COM/BILL CUPERTINO CA ONE APPLEOPARK","displayDescription":"Apple","category":"Subscriptions","amount":-2.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 16","sortDate":"2026-05-16","rawDescription":"IN-N-OUT ONTARIO         ONTARIO      CA","displayDescription":"In-N-Out","category":"Fast Food","amount":-12.23,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 16","sortDate":"2026-05-16","rawDescription":"LITTLE CAESARS #5759     UPLAND       CA","displayDescription":"Little Caesars","category":"Fast Food","amount":-16.14,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 15","sortDate":"2026-05-15","rawDescription":"TAQUERIA EL ARBOLITO     ONTARIO      CA","displayDescription":"El Arbolito","category":"Restaurants","amount":-12.69,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 14","sortDate":"2026-05-14","rawDescription":"POKIMANIA CHINO HILLS CA 3330 GRAND AOE","displayDescription":"Pokimania","category":"Restaurants","amount":-17.77,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 13","sortDate":"2026-05-13","rawDescription":"HAPPY WATER ONTARIO CA 1947 E 4TH ST O","displayDescription":"Happy Water","category":"Groceries","amount":-7.5,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 12","sortDate":"2026-05-12","rawDescription":"IN-N-OUT RIVERSIDE 3 RIVERSIDE CA 348O VAN","displayDescription":"In-N-Out","category":"Fast Food","amount":-9.52,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 11","sortDate":"2026-05-11","rawDescription":"POS ALIRA FUEL MART ONTARIO CA 1155 N GROO","displayDescription":"Alira Fuel Mart Ontario Ca ...","category":"Gas","amount":-62.51,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 11","sortDate":"2026-05-11","rawDescription":"POS ALDI 79118 UPLAND CA UPLAND          O","displayDescription":"Aldi","category":"Groceries","amount":-11.14,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 8","sortDate":"2026-05-08","rawDescription":"Interest Charge on Purchases","displayDescription":"Interest Charge","category":"Bank Fees","amount":-4.44,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 7","sortDate":"2026-05-07","rawDescription":"IN-N-OUT ONTARIO         ONTARIO      CA","displayDescription":"In-N-Out","category":"Fast Food","amount":-10.06,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true},{"date":"May 5","sortDate":"2026-05-05","rawDescription":"POS DOLLARTREE MONTCLAIR CA 5399 MORENO SO","displayDescription":"Dollar Tree","category":"Shopping","amount":-14.76,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 4","sortDate":"2026-05-04","rawDescription":"POS ALDI 79118 UPLAND CA UPLAND          O","displayDescription":"Aldi","category":"Groceries","amount":-48.14,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 4","sortDate":"2026-05-04","rawDescription":"POS ALIRA FUEL MART ONTARIO CA ONTARIO   O","displayDescription":"Alira Fuel Mart","category":"Gas","amount":-36.33,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 3","sortDate":"2026-05-03","rawDescription":"SQ *NOBIBI ICE CREAM & Claremont CA 1O5N","displayDescription":"Nobibi","category":"Bakery & Treats","amount":-7.25,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 3","sortDate":"2026-05-03","rawDescription":"YOGURTLAND CLAREMONT CLAREMONT CA 101ON","displayDescription":"Yogurtland","category":"Bakery & Treats","amount":-13.34,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 3","sortDate":"2026-05-03","rawDescription":"POS Huntington Surf and Huntington Be CA O","displayDescription":"Huntington Surf","category":"Recreation","amount":-3.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 3","sortDate":"2026-05-03","rawDescription":"CITY OF HB PARKING MET HUNTINGTN BCH OA","displayDescription":"City of Hb","category":"Parking","amount":-15.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 3","sortDate":"2026-05-03","rawDescription":"07476 EOS CA MONTCLAIR MONTCLAIR CA 5O50","displayDescription":"EOS Fitness","category":"Gym","amount":-29.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 1","sortDate":"2026-05-01","rawDescription":"CHEVRON 0099527 POMONA CA 1515 N GAREO AVE","displayDescription":"Chevron","category":"Gas","amount":-20.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"May","year":2026,"pending":false},{"date":"May 1","sortDate":"2026-05-01","rawDescription":"PARKING SERVICE CENTER   SANTA ANA    CA","displayDescription":"Parking Center","category":"Parking","amount":-55.95,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"May","year":2026,"pending":true}],"income":[]},"Jun":{"transactions":[{"date":"Jun 30","sortDate":"2026-06-30","rawDescription":"POS SMART AND FINAL 408 ONTARIO CA 1337 4O","displayDescription":"Smart & Final","category":"Groceries","amount":-7.6,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 30","sortDate":"2026-06-30","rawDescription":"APPLE.COM/BILL CUPERTINO CA ONE APPLEOPARK","displayDescription":"Apple","category":"Subscriptions","amount":-8.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 30","sortDate":"2026-06-30","rawDescription":"IN-N-OUT RIVERSIDE 3     RIVERSIDE    CA","displayDescription":"In-N-Out","category":"Fast Food","amount":-6.31,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jun","year":2026,"pending":true},{"date":"Jun 29","sortDate":"2026-06-29","rawDescription":"SANAMLUANG THAI CUISIN   CLAREMONT    CA","displayDescription":"Sanamluang Thai","category":"Restaurants","amount":-31.52,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jun","year":2026,"pending":true},{"date":"Jun 28","sortDate":"2026-06-28","rawDescription":"Spotify USA New York NY 45 W. 18th StOeet","displayDescription":"Spotify","category":"Subscriptions","amount":-12.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 27","sortDate":"2026-06-27","rawDescription":"POS STATERBROS085 ONTARIO CA 1939 E 4TH SO","displayDescription":"Stater Bros","category":"Groceries","amount":-9.8,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 27","sortDate":"2026-06-27","rawDescription":"HANDELS HOMEMADE CANYO   RIVERSIDE    CA","displayDescription":"Handel's","category":"Bakery & Treats","amount":-6.95,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jun","year":2026,"pending":true},{"date":"Jun 27","sortDate":"2026-06-27","rawDescription":"RALPHS #0609             RIVERSIDE    CA","displayDescription":"Ralphs","category":"Groceries","amount":-3.19,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jun","year":2026,"pending":true},{"date":"Jun 26","sortDate":"2026-06-26","rawDescription":"VALLARTA VFE 66 RANCHO CUCAMO CA","displayDescription":"Vallarta","category":"Groceries","amount":-4.42,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 26","sortDate":"2026-06-26","rawDescription":"VALLARTA VFE 66 RANCHO CUCAMO CA","displayDescription":"Vallarta","category":"Groceries","amount":-1.77,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 26","sortDate":"2026-06-26","rawDescription":"POS ARCO 916287 ONTARIO CA ONTARIO       O","displayDescription":"ARCO","category":"Gas","amount":-51.19,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 25","sortDate":"2026-06-25","rawDescription":"TARGET T-1423 MONTCLAIR CA 9052 CENTROL","displayDescription":"Target","category":"Shopping","amount":-2.66,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 25","sortDate":"2026-06-25","rawDescription":"CITY OF SANTA MONICA SANTA MONICA CA O685","displayDescription":"City of Santa Monica","category":"Utilities","amount":-4.75,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 25","sortDate":"2026-06-25","rawDescription":"CITY OF SANTA MONICA SANTA MONICA CA O685","displayDescription":"City of Santa Monica","category":"Utilities","amount":-3.25,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 24","sortDate":"2026-06-24","rawDescription":"PARKING SERVICE CENTER SANTA ANA CA 2O77 N","displayDescription":"Parking Center","category":"Parking","amount":-55.95,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 24","sortDate":"2026-06-24","rawDescription":"PARKING SERVICE CENTER SANTA ANA CA 2O77 N","displayDescription":"Parking Center","category":"Parking","amount":-161.9,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 24","sortDate":"2026-06-24","rawDescription":"APPLE CASH SENT MONEY CUPERTINO CA 1","displayDescription":"Apple","category":"Personal Care","amount":-35.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 24","sortDate":"2026-06-24","rawDescription":"METRO EXPRESSLANES QPS TORRANCE CA 20O01","displayDescription":"Metro ExpressLanes","category":"Tolls","amount":-31.3,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 24","sortDate":"2026-06-24","rawDescription":"HP *INSTANT INK PALO ALTO CA 3400 HanOver","displayDescription":"HP Instant Ink","category":"Business Expense","amount":-1.93,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 23","sortDate":"2026-06-23","rawDescription":"HAPPY WATER ONTARIO CA 1947 E 4TH ST O","displayDescription":"Happy Water","category":"Groceries","amount":-7.5,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 23","sortDate":"2026-06-23","rawDescription":"IN-N-OUT RIVERSIDE 3 RIVERSIDE CA 348O VAN","displayDescription":"In-N-Out","category":"Fast Food","amount":-9.08,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 23","sortDate":"2026-06-23","rawDescription":"MVQ*NAPA BENEFITS LAKEWOOD RANC FL 84O0","displayDescription":"Napa Benefits","category":"Business Expense","amount":-126.25,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 23","sortDate":"2026-06-23","rawDescription":"HP *INSTANT INK PALO ALTO CA 3400 HanOver","displayDescription":"HP Instant Ink","category":"Business Expense","amount":-1.93,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 21","sortDate":"2026-06-21","rawDescription":"CHEVRON 0352247 MONTCLAIR CA 9700 CENORAL","displayDescription":"Chevron","category":"Gas","amount":-60.97,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 21","sortDate":"2026-06-21","rawDescription":"MCDONALD'S F10992 MONTCLAIR CA 9141","displayDescription":"McDonald's","category":"Fast Food","amount":-9.13,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 21","sortDate":"2026-06-21","rawDescription":"POS WINCO FOODS #57 POMONA CA WINCO90 RIOO","displayDescription":"WinCo","category":"Groceries","amount":-6.07,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 21","sortDate":"2026-06-21","rawDescription":"Dropbox MW4P4PDTMN8J San Francisco CAO185","displayDescription":"Dropbox","category":"Business Expense","amount":-11.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 20","sortDate":"2026-06-20","rawDescription":"POS STATERBROS073 MONTCLAIR CA 9575 CENTRO","displayDescription":"Stater Bros","category":"Groceries","amount":-25.2,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 18","sortDate":"2026-06-18","rawDescription":"CLAREMONT WILDERNESS P CLAREMONT CA 2O7","displayDescription":"Claremont Wilderness","category":"Recreation","amount":-5.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 17","sortDate":"2026-06-17","rawDescription":"APPLE CASH SENT MONEY CUPERTINO CA 1","displayDescription":"Apple","category":"Personal Care","amount":-26.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 17","sortDate":"2026-06-17","rawDescription":"POS ARCO 242677 BALDWIN PARK CA BALDWIN PO","displayDescription":"ARCO","category":"Gas","amount":-20.64,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 17","sortDate":"2026-06-17","rawDescription":"POS ARCO 242677 BALDWIN PARK CA BALDWIN PO","displayDescription":"ARCO","category":"Gas","amount":-6.43,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 16","sortDate":"2026-06-16","rawDescription":"WAL-MART #3796 ONTARIO CA 1333 N MOUNOAIN","displayDescription":"Walmart","category":"Business Expense","amount":-10.34,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 16","sortDate":"2026-06-16","rawDescription":"APPLE.COM/BILL CUPERTINO CA ONE APPLEOPARK","displayDescription":"Apple","category":"Subscriptions","amount":-2.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 16","sortDate":"2026-06-16","rawDescription":"IN-N-OUT ONTARIO ONTARIO CA 1891 EASTOG ST","displayDescription":"In-N-Out","category":"Fast Food","amount":-2.66,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 15","sortDate":"2026-06-15","rawDescription":"SHELL OIL 10008156001 POMONA CA 2500 O","displayDescription":"Shell","category":"Gas","amount":-31.03,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 15","sortDate":"2026-06-15","rawDescription":"THE DONUTTERY INC HUNTINGTON BE CA 17O20","displayDescription":"The Donuttery Inc Huntington","category":"Bakery & Treats","amount":-2.9,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 15","sortDate":"2026-06-15","rawDescription":"GOODWILL- OC BOUTIQUE HUNTINGTON BE CO","displayDescription":"Goodwill","category":"Shopping","amount":-60.08,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 14","sortDate":"2026-06-14","rawDescription":"OTTER* JOESITALIANICE LOS ANGELES CA O77 S","displayDescription":"Joe's Italian Ice","category":"Restaurants","amount":-6.88,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 14","sortDate":"2026-06-14","rawDescription":"POS CVS/PHARMACY #00819 HuntingtonBea CA O","displayDescription":"CVS","category":"Pharmacy","amount":-3.49,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 13","sortDate":"2026-06-13","rawDescription":"POS SMART AND FINAL ONTARIO CA ONTARIO   O","displayDescription":"Smart & Final","category":"Groceries","amount":-36.13,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 12","sortDate":"2026-06-12","rawDescription":"Spotify USA New York NY 45 W. 18th StOeet","displayDescription":"Spotify","category":"Subscriptions","amount":-12.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 12","sortDate":"2026-06-12","rawDescription":"CHIPOTLE 0230 UPLAND CA 1092 N MOUNTAON","displayDescription":"Chipotle","category":"Fast Food","amount":-19.52,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 7","sortDate":"2026-06-07","rawDescription":"Interest Charge on Purchases","displayDescription":"Interest Charge","category":"Bank Fees","amount":-5.25,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jun","year":2026,"pending":true},{"date":"Jun 2","sortDate":"2026-06-02","rawDescription":"ANTHROPIC* CLAUDE SUB SAN FRANCISCO CO 548","displayDescription":"Anthropic Claude","category":"Business Expense","amount":-20.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 1","sortDate":"2026-06-01","rawDescription":"STATERBROS085            ONTARIO      CA","displayDescription":"Stater Bros","category":"Groceries","amount":-11.27,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jun","year":2026,"pending":true}],"income":[{"date":"Jun 30","sortDate":"2026-06-30","rawDescription":"Deposit COLONIAL L&A INS","displayDescription":"Deposit Colonial L&a Insurance","category":"Income","amount":569.4,"type":"Credit","account":"01 PRIMARY REGULAR SHARE ACCOUNT","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 23","sortDate":"2026-06-23","rawDescription":"Deposit COLONIAL L&A INS","displayDescription":"Deposit Colonial L&a Insurance","category":"Income","amount":315.39,"type":"Credit","account":"01 PRIMARY REGULAR SHARE ACCOUNT","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 20","sortDate":"2026-06-20","rawDescription":"Deposit REWARDS CASHBACK","displayDescription":"Cashback","category":"Income","amount":100.0,"type":"Credit","account":"01 PRIMARY REGULAR SHARE ACCOUNT","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 20","sortDate":"2026-06-20","rawDescription":"Deposit REWARDS CASHBACK","displayDescription":"Cashback","category":"Income","amount":50.0,"type":"Credit","account":"01 PRIMARY REGULAR SHARE ACCOUNT","status":"","month":"Jun","year":2026,"pending":false},{"date":"Jun 20","sortDate":"2026-06-20","rawDescription":"Deposit REWARDS CASHBACK","displayDescription":"Cashback","category":"Income","amount":10.0,"type":"Credit","account":"01 PRIMARY REGULAR SHARE ACCOUNT","status":"","month":"Jun","year":2026,"pending":false}]},"Jul":{"transactions":[{"date":"Jul 31","sortDate":"2026-07-31","rawDescription":"APPLE CASH SENT MONEY CUPERTINO CA 1","displayDescription":"Apple","category":"Personal Care","amount":-35.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 30","sortDate":"2026-07-30","rawDescription":"POS ARCO 240390 ONTARIO CA ONTARIO       O","displayDescription":"ARCO","category":"Gas","amount":-30.71,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 28","sortDate":"2026-07-28","rawDescription":"HARKINS CHINO HILLS CHINO HILLS CA 30O0","displayDescription":"Harkins Theatres","category":"Recreation","amount":-16.34,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 24","sortDate":"2026-07-24","rawDescription":"63315 5453 USA GAS MONTCLAIR CA 9690","displayDescription":"USA Gasoline","category":"Gas","amount":-30.38,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 23","sortDate":"2026-07-23","rawDescription":"HP *INSTANT INK PALO ALTO CA 3400 HanOver","displayDescription":"HP Instant Ink","category":"Business Expense","amount":-1.95,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 22","sortDate":"2026-07-22","rawDescription":"POS ARCO 222786 SAN DIMAS CA SAN DIMAS   O","displayDescription":"ARCO","category":"Gas","amount":-25.68,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 18","sortDate":"2026-07-18","rawDescription":"POS ARCO 916287 ONTARIO CA ONTARIO       O","displayDescription":"ARCO","category":"Gas","amount":-23.87,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 16","sortDate":"2026-07-16","rawDescription":"STATE FARM INSURANCE BLOOMINGTON IL","displayDescription":"State Farm","category":"Insurance","amount":-189.14,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 15","sortDate":"2026-07-15","rawDescription":"LAZ PARKING M47407TIBA LOS ANGELES CAO5120","displayDescription":"LAZ Parking","category":"Parking","amount":-16.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 14","sortDate":"2026-07-14","rawDescription":"PARKING CONCEPTS INC L EL SEGUNDO CA O00 N","displayDescription":"Parking Concepts","category":"Business Expense","amount":-18.0,"type":"Debit","account":"71 BUSINESS CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 14","sortDate":"2026-07-14","rawDescription":"FD *CA DMV 612 *SVC RANCHO CUCAMO CA O629","displayDescription":"CA DMV","category":"Auto Registration","amount":-3.66,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 14","sortDate":"2026-07-14","rawDescription":"FD *CA DMV 612 RANCHO CUCAMO CA 8629","displayDescription":"CA DMV","category":"Auto Registration","amount":-174.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 14","sortDate":"2026-07-14","rawDescription":"POS ALIRA FUEL MART ONTARIO CA ONTARIO   O","displayDescription":"Alira Fuel Mart","category":"Gas","amount":-25.64,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 14","sortDate":"2026-07-14","rawDescription":"VONS FUEL2681 UPLAND CA 81 WEST FOOTHOLL","displayDescription":"Vons Fuel","category":"Groceries","amount":-24.91,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 13","sortDate":"2026-07-13","rawDescription":"NIC*HUNTINGTON STATE HUNTINGTON BE","displayDescription":"Huntington State Beach","category":"Recreation","amount":-20.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 12","sortDate":"2026-07-12","rawDescription":"NOSY NEIGHBORS COFFEE CLAREMONT CA 13O","displayDescription":"Nosy Neighbors Coffee","category":"Coffee Shops","amount":-26.58,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 10","sortDate":"2026-07-10","rawDescription":"WINGSTOP 1363 WALNUT CA 1229 NORTH GROND","displayDescription":"Wingstop","category":"Fast Food","amount":-18.65,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 9","sortDate":"2026-07-09","rawDescription":"POS ALDI 79118 UPLAND CA UPLAND          O","displayDescription":"Aldi","category":"Groceries","amount":-4.68,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 9","sortDate":"2026-07-09","rawDescription":"TST*SHAWARMA HOUSE Garden Grove CA 12O31 S","displayDescription":"Shawarma House","category":"Restaurants","amount":-18.66,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 8","sortDate":"2026-07-08","rawDescription":"MANNY'S SMOG ONTARIO ONTARIO CA 129 NORTH","displayDescription":"Manny's Smog","category":"Auto Maintenance","amount":-30.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 8","sortDate":"2026-07-08","rawDescription":"Interest Charge on Purchases","displayDescription":"Interest Charge","category":"Bank Fees","amount":-6.83,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jul","year":2026,"pending":true},{"date":"Jul 6","sortDate":"2026-07-06","rawDescription":"TST* BAD ASS COFFEE - TUSTIN CA 17243O17TH","displayDescription":"Bad Ass Coffee","category":"Coffee Shops","amount":-8.5,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 6","sortDate":"2026-07-06","rawDescription":"SQ *HANDEL'S HOMEMADE Huntington Be CO 300","displayDescription":"Handel's","category":"Bakery & Treats","amount":-7.25,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 6","sortDate":"2026-07-06","rawDescription":"NIC*CRYSTAL COVE STAT LAGUNA BEACH CAO8471","displayDescription":"Crystal Cove Park","category":"Recreation","amount":-20.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 6","sortDate":"2026-07-06","rawDescription":"POS SMART AND FINAL 408 ONTARIO CA 1337 4O","displayDescription":"Smart & Final","category":"Groceries","amount":-10.94,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 6","sortDate":"2026-07-06","rawDescription":"IN-N-OUT STANTON STANTON CA 12975 BEAOH","displayDescription":"In-N-Out","category":"Fast Food","amount":-9.52,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 6","sortDate":"2026-07-06","rawDescription":"TARGET T-1423            MONTCLAIR    CA","displayDescription":"Target","category":"Shopping","amount":-7.48,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jul","year":2026,"pending":true},{"date":"Jul 6","sortDate":"2026-07-06","rawDescription":"ARCO 916287              ONTARIO      CA","displayDescription":"ARCO","category":"Gas","amount":-39.3,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jul","year":2026,"pending":true},{"date":"Jul 5","sortDate":"2026-07-05","rawDescription":"TST*SHAKE SHACK CRYSTA Newport Beach OA","displayDescription":"Shake Shack","category":"Fast Food","amount":-22.04,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 4","sortDate":"2026-07-04","rawDescription":"WM SUPERCENTER #5691 UPLAND CA 1445","displayDescription":"Walmart","category":"Business Expense","amount":-12.88,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 3","sortDate":"2026-07-03","rawDescription":"HAPPY WATER ONTARIO CA 1947 E 4TH ST O","displayDescription":"Happy Water","category":"Groceries","amount":-9.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 3","sortDate":"2026-07-03","rawDescription":"POS 63315 5453 USA GAS MONTCLAIR CA 9690 O","displayDescription":"USA Gasoline","category":"Gas","amount":-47.26,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 3","sortDate":"2026-07-03","rawDescription":"POS ALDI 79118 UPLAND CA 349 MOUNTAIN AVEO","displayDescription":"Aldi","category":"Groceries","amount":-22.16,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 3","sortDate":"2026-07-03","rawDescription":"POS SMART AND FINAL 408 ONTARIO CA 1337 4O","displayDescription":"Smart & Final","category":"Groceries","amount":-18.83,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 2","sortDate":"2026-07-02","rawDescription":"MVQ*NAPA BENEFITS LAKEWOOD RANC FL 84O0","displayDescription":"Napa Benefits","category":"Business Expense","amount":-26.25,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 2","sortDate":"2026-07-02","rawDescription":"ANTHROPIC* CLAUDE SUB    SAN FRANCISCOCA","displayDescription":"Anthropic Claude","category":"Business Expense","amount":-20.0,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jul","year":2026,"pending":true},{"date":"Jul 1","sortDate":"2026-07-01","rawDescription":"ABC*7476-EOS FITNESS MONTCLAIR CA 515O","displayDescription":"EOS Fitness","category":"Gym","amount":-24.99,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 1","sortDate":"2026-07-01","rawDescription":"85C BAKERY CAFE USA CLAREMONT CA 865 OOUTH","displayDescription":"85C Bakery","category":"Bakery & Treats","amount":-24.0,"type":"Debit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 1","sortDate":"2026-07-01","rawDescription":"CVS/PHARMACY #10914      RANCHO CUCAMOCA","displayDescription":"CVS","category":"Pharmacy","amount":-3.49,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jul","year":2026,"pending":true},{"date":"Jul 1","sortDate":"2026-07-01","rawDescription":"TARGET T-1423            MONTCLAIR    CA","displayDescription":"Target","category":"Shopping","amount":-5.19,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jul","year":2026,"pending":true},{"date":"Jul 1","sortDate":"2026-07-01","rawDescription":"ANTHROPIC                SAN FRANCISCOCA","displayDescription":"Anthropic","category":"Business Expense","amount":-15.0,"type":"Debit","account":"Mastercard Rewards ****7580","status":"","month":"Jul","year":2026,"pending":true}],"income":[{"date":"Jul 27","sortDate":"2026-07-27","rawDescription":"eDeposit","displayDescription":"eDeposit","category":"Income","amount":90.05,"type":"Credit","account":"PERSONAL CHECKING","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 21","sortDate":"2026-07-21","rawDescription":"Deposit COLONIAL L&A INS","displayDescription":"Deposit Colonial L&a Insurance","category":"Income","amount":29.83,"type":"Credit","account":"01 PRIMARY REGULAR SHARE ACCOUNT","status":"","month":"Jul","year":2026,"pending":false},{"date":"Jul 7","sortDate":"2026-07-07","rawDescription":"Deposit COLONIAL L&A INS","displayDescription":"Deposit Colonial L&a Insurance","category":"Income","amount":532.37,"type":"Credit","account":"01 PRIMARY REGULAR SHARE ACCOUNT","status":"","month":"Jul","year":2026,"pending":false}]},"Aug":{"transactions":[],"income":[],"summary":{}}},"savingsByMonth":{"Apr":{"couldCancel":0,"cancelled":0},"May":{"couldCancel":0,"cancelled":0},"Jun":{"couldCancel":0,"cancelled":0},"Jul":{"couldCancel":0,"cancelled":0}},"budgets":{"Gas":200,"Groceries":200,"Fast Food":100,"Restaurants":80,"Coffee Shops":50,"Bakery & Treats":30,"Shopping":100,"Subscriptions":40,"Business Expense":150,"Gym":30,"Pharmacy":20,"Auto Maintenance":50,"Parking":50,"Recreation":30,"Tolls":20,"Auto Registration":20,"Insurance":200,"Utilities":20,"Bank Fees":10,"Cash":20,"Auto & Transport":30,"Food & Dining":50,"Misc":20},"goals":{"taxPct":25,"tithePct":5,"savingsPct":30},"userName":"Jaymes","year":2026};
+var CC={"Gas":"#d97706","Groceries":"#16a34a","Fast Food":"#f97316","Restaurants":"#ea580c","Coffee Shops":"#92400e","Bakery & Treats":"#f59e0b","Shopping":"#9333ea","Subscriptions":"#2563eb","Business Expense":"#0891b2","Gym":"#059669","Pharmacy":"#dc2626","Auto Maintenance":"#78716c","Parking":"#6b7280","Recreation":"#10b981","Tolls":"#84cc16","Auto Registration":"#b45309","Insurance":"#374151","Utilities":"#0284c7","Bank Fees":"#991b1b","Cash":"#4b5563","Personal Care":"#ec4899","Misc":"#9ca3af"};
+var CATS=["Auto Maintenance","Auto Registration","Bakery & Treats","Bank Fees","Business Expense","Cash","Coffee Shops","Fast Food","Gas","Groceries","Gym","Insurance","Misc","Parking","Personal Care","Pharmacy","Recreation","Restaurants","Shopping","Subscriptions","Tolls","Utilities"];
+var DBUDGETS={"Gas":200,"Groceries":200,"Fast Food":100,"Restaurants":80,"Coffee Shops":50,"Bakery & Treats":30,"Shopping":100,"Subscriptions":40,"Business Expense":150,"Gym":30,"Pharmacy":20,"Auto Maintenance":50,"Parking":50,"Recreation":30,"Tolls":20,"Auto Registration":20,"Insurance":200,"Utilities":20,"Bank Fees":10,"Cash":20,"Auto & Transport":30,"Food & Dining":50,"Misc":20};
+var SS={"cut":[{"cat":"Fast Food","spent":49.6,"target":10,"save":39.6,"tip":"Cook at home. One fast food trip/week max."},{"cat":"Restaurants","spent":38.4,"target":0,"save":38.4,"tip":"Shift to groceries for most meals."},{"cat":"Bakery & Treats","spent":6.95,"target":0,"save":6.95,"tip":"Skip or grab from grocery store."},{"cat":"Recreation","spent":5.0,"target":0,"save":5.0,"tip":"Free beaches are close by."}],"reduce":[{"cat":"Shopping","spent":73.08,"target":20,"save":53.08,"tip":"Set a hard $20/mo limit for non-essentials."},{"cat":"Subscriptions","spent":37.96,"target":25,"save":12.96,"tip":"Audit what you actually use."},{"cat":"Gas","spent":170.26,"target":130,"save":40.26,"tip":"Fill up at ARCO or Costco."}],"watch":[{"cat":"Parking","spent":217.85,"save":null,"tip":"Is any reimbursable from work?"},{"cat":"Bank Fees","spent":5.25,"save":5.25,"tip":"CC interest. Pay off Mastercard to stop this."},{"cat":"Tolls","spent":31.3,"save":null,"tip":"Log work trips - may be tax deductible."}],"keep":[{"cat":"Groceries","spent":112.95,"tip":"Necessary. Shop smart."},{"cat":"Business Expense","spent":162.1,"tip":"Work tools. Keep all."},{"cat":"Utilities","spent":8.0,"tip":"Fixed cost."},{"cat":"Pharmacy","spent":3.49,"tip":"Health first."}]};
+var BILLS=[{"name":"Tax Set-Aside","amount":0,"due":"Each paycheck","paid":"not yet","necessary":true,"urgent":true,"tag":"URGENT","note":"TAXES acct = $0. Move 25% of every Colonial Life check here same day."},{"name":"Credit Card ****7580","amount":15.0,"due":"Aug 2","paid":"not yet","necessary":true,"urgent":true,"tag":"URGENT","note":"Min $15 due Aug 2. Balance ~$494. Pay today."},{"name":"Phone","amount":60.0,"due":"15th","paid":"not yet","necessary":true,"urgent":true,"tag":"OVERDUE","note":"Still unpaid from July. Pay ASAP."},{"name":"iCloud Storage","amount":2.99,"due":"16th","paid":"not yet","necessary":true,"urgent":true,"tag":"OVERDUE","note":"Still unpaid from July. Pay ASAP."},{"name":"E&O Insurance","amount":26.25,"due":"1st","paid":"not yet","necessary":true,"urgent":false,"tag":"Necessary","note":"Work insurance. Due today (Aug 1)."},{"name":"Car Insurance","amount":190.0,"due":"15th","paid":"not yet","necessary":true,"urgent":false,"tag":"Necessary","note":""},{"name":"Gas","amount":210.0,"due":"Ongoing","paid":"not yet","necessary":true,"urgent":false,"tag":"Necessary","note":"Work commute."},{"name":"HP Instant Ink","amount":1.93,"due":"23rd","paid":"not yet","necessary":true,"urgent":false,"tag":"Business","note":""},{"name":"EOS Fitness","amount":24.99,"due":"25th","paid":"not yet","necessary":true,"urgent":false,"tag":"Necessary","note":""},{"name":"DMV Registration","amount":274.0,"due":"Done","paid":"paid","necessary":false,"urgent":false,"tag":"One-time","note":"Done for the year."},{"name":"Spotify","amount":12.99,"due":"28th","paid":"not yet","necessary":false,"urgent":false,"tag":"Optional","note":""},{"name":"Claude (Anthropic)","amount":20.0,"due":"2nd","paid":"not yet","necessary":true,"urgent":false,"tag":"Business","note":""},{"name":"Tablet - Cellular","amount":15.0,"due":"20th","paid":"not yet","necessary":true,"urgent":false,"tag":"Necessary","note":""},{"name":"Tablet - Payoff","amount":20.0,"due":"20th","paid":"not yet","necessary":true,"urgent":false,"tag":"Debt","note":""},{"name":"Evarlance","amount":8.99,"due":"24th","paid":"not yet","necessary":true,"urgent":false,"tag":"Business","note":"Tracks mileage = $479 deduction."},{"name":"Repay Manny","amount":100.0,"due":"25th","paid":"skip","necessary":false,"urgent":false,"tag":"Debt","note":"$751.85 remaining."},{"name":"Groceries","amount":150.0,"due":"Ongoing","paid":"skip","necessary":true,"urgent":false,"tag":"Necessary","note":"Food budget."},{"name":"Food - Mom","amount":200.0,"due":"5th","paid":"not yet","necessary":false,"urgent":false,"tag":"Optional","note":""},{"name":"Dropbox","amount":11.99,"due":"21st","paid":"skip","necessary":false,"urgent":false,"tag":"Optional","note":"May be cancelled. Verify."},{"name":"Rent","amount":600.0,"due":"1st","paid":"skip","necessary":true,"urgent":false,"tag":"Deferred","note":"Deferred while building savings."}];
+var FUTURE=[{"name":"Costco Gold Star Membership","amount":65.0,"freq":"Annual","why":"Gas savings at Costco pump easily offsets the fee. Cheaper groceries too.","priority":"High"},{"name":"Savings Account (Move Fund)","amount":50.0,"freq":"Monthly","why":"Get to $500 to open a share certificate at SchoolsFirst.","priority":"High"},{"name":"FX3 Camera & Lenses","amount":200.0,"freq":"Monthly","why":"Lease payments for wedding gear. Start when wedding income is steady.","priority":"Low"}];
+var GOALS=[
+  {name:"Automobile Repair",current:4.94,target:1200,note:"Priority 1. Add $50+/mo.",color:"#d97706"},
+  {name:"Move Fund",current:0,target:500,note:"Opens share certificate at SchoolsFirst.",color:"#2563eb"},
+  {name:"FX3 & Lenses",current:0,target:6475,note:"Wedding gear. Lease when income is steady.",color:"#9333ea"}
+];
+var DEBTS=[
+  {name:"Mastercard ****7580",paid:5.30,total:500,remaining:494.70,urgent:true,note:"98.9% utilized. Min $15 due Aug 2. Get below $150 ASAP."},
+  {name:"Manny",paid:300,total:1051.85,remaining:751.85,urgent:false,note:"$300 paid. Target $100/mo."}
+];
+var CUR=DATA.monthOrder[DATA.monthOrder.length-1]||"Jul";
+var TXN_M="All",TX_COL="date",TX_DIR=-1;
+var SBK={},CBK={},BOVER={},CTCAT=CATS[0],BF="all",BPAY={};
+var DC=null,MC=null,CC2=null;
+try{var _s=localStorage.getItem("jfd:s");if(_s)SBK=JSON.parse(_s);}catch(e){}
+try{var _c=localStorage.getItem("jfd:c");if(_c)CBK=JSON.parse(_c);}catch(e){}
+try{var _b=localStorage.getItem("jfd:b");if(_b)BOVER=JSON.parse(_b);}catch(e){}
+try{var _m=localStorage.getItem("jfd:m");if(_m&&DATA.monthOrder.indexOf(_m)>=0)CUR=_m;}catch(e){}
+try{var _bp=localStorage.getItem("jfd:bp");if(_bp)BPAY=JSON.parse(_bp);}catch(e){}
+
+function fmt(n){return"$"+Math.abs(n||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+function fmts(n){return(n>=0?"+$":"-$")+Math.abs(n||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+function rk(t){return t.year+"|"+t.month+"|"+t.rawDescription+"|"+parseFloat(t.amount).toFixed(2);}
+function gc(t){return CBK[rk(t)]||t.category;}
+function gs(t){return SBK[rk(t)]||t.status||"";}
+function catcol(c){return CC[c]||"#9ca3af";}
+function mT(m){return(DATA.months[m]&&DATA.months[m].transactions)||[];}
+function mI(m){return(DATA.months[m]&&DATA.months[m].income)||[];}
+function mSp(m){return mT(m).filter(function(t){return t.type==="Debit";}).reduce(function(s,t){return s+Math.abs(t.amount);},0);}
+function mCS(m,cat){return mT(m).filter(function(t){return gc(t)===cat&&t.type==="Debit";}).reduce(function(s,t){return s+Math.abs(t.amount);},0);}
+function gb(c){return BOVER[c]!=null?BOVER[c]:(DBUDGETS[c]||0);}
+function compSav(m){var cc=0,ca=0;mT(m).forEach(function(t){var s=gs(t),a=Math.abs(t.amount);if(s==="could cancel")cc+=a;else if(s==="cancelled")ca+=a;});return{cc:cc,ca:ca};}
+function toast(msg){var t=document.getElementById("toast");if(!t)return;t.textContent=msg;t.style.display="block";setTimeout(function(){t.style.display="none";},3000);}
+function el(tag,cls,html){var d=document.createElement(tag);if(cls)d.className=cls;if(html!==undefined)d.innerHTML=html;return d;}
+function div(cls,html){return el("div",cls,html);}
+function callout(type,text){var d=div("c "+type);d.textContent=text;return d;}
+
+// TABS
+document.querySelectorAll(".tbtn").forEach(function(btn){
+  btn.addEventListener("click",function(){
+    var tab=btn.getAttribute("data-tab");
+    document.querySelectorAll(".panel").forEach(function(p){p.classList.remove("active");});
+    document.querySelectorAll(".tbtn").forEach(function(b){b.classList.remove("active");});
+    var p=document.getElementById(tab);if(p)p.classList.add("active");
+    btn.classList.add("active");
+    if(tab==="month-vs-month")setTimeout(function(){requestAnimationFrame(function(){try{rMVM();}catch(e){console.error("MVM:",e);}});},100);
+    if(tab==="budget")try{rBudget();}catch(e){console.error("Budget:",e);}
+    if(tab==="insights")try{rInsights();}catch(e){console.error("Insights:",e);}
+    if(tab==="super-savings")try{rSS();}catch(e){console.error("SS:",e);}
+    if(tab==="goals-debt")try{rGoals();}catch(e){console.error("Goals:",e);}
+    if(tab==="bills")try{rBills();}catch(e){console.error("Bills:",e);}
+  });
+});
+
+// OVERVIEW
+function rOvMonths(){
+  var wrap=document.getElementById("ov-months");if(!wrap)return;wrap.innerHTML="";
+  DATA.monthOrder.forEach(function(m){
+    var b=document.createElement("button");b.className="pill"+(m===CUR?" active":"");b.textContent=m;
+    b.addEventListener("click",function(){
+      CUR=m;try{localStorage.setItem("jfd:m",m);}catch(e){}
+      wrap.querySelectorAll(".pill").forEach(function(p){p.classList.toggle("active",p.textContent===m);});
+      rOv();
+    });
+    wrap.appendChild(b);
+  });
+}
+function rOv(){
+  try{rKPI();}catch(e){}
+  try{rDonut();}catch(e){}
+  try{rTransfers();}catch(e){}
+  try{rSavTrack();}catch(e){}
+  try{rOvIns();}catch(e){}
+}
+function rKPI(){
+  var inc=mI(CUR).reduce(function(s,t){return s+t.amount;},0);
+  var sp=mSp(CUR),net=inc-sp;
+  var e;
+  e=document.getElementById("cl-val");if(e)e.textContent=fmt(inc);
+  e=document.getElementById("cl-note");if(e)e.textContent=inc>0?"Income received this month":"No income in CSV for "+CUR;
+  e=document.getElementById("k-inc");if(e)e.textContent=fmt(inc);
+  e=document.getElementById("k-sp");if(e)e.textContent=fmt(sp);
+  e=document.getElementById("k-tax");if(e)e.textContent=fmt(inc*0.25);
+  e=document.getElementById("k-net");if(e){
+    e.textContent=(net>=0?"+$":"-$")+Math.abs(net).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,",");
+    e.className="kval "+(net>=0?"g":"r");
+  }
+}
+function rDonut(){
+  var cats={};
+  mT(CUR).forEach(function(t){if(t.type!=="Debit")return;var c=gc(t);cats[c]=(cats[c]||0)+Math.abs(t.amount);});
+  var sorted=Object.keys(cats).sort(function(a,b){return cats[b]-cats[a];});
+  var leg=document.getElementById("sleg");if(leg)leg.innerHTML="";
+  if(!sorted.length)return;
+  var vals=sorted.map(function(c){return cats[c];});
+  var cols=sorted.map(function(c){return catcol(c);});
+  var canvas=document.getElementById("donut");
+  if(canvas&&typeof Chart!=="undefined"){
+    try{if(DC){DC.destroy();DC=null;}
+    DC=new Chart(canvas.getContext("2d"),{
+      type:"doughnut",
+      data:{labels:sorted,datasets:[{data:vals,backgroundColor:cols,borderWidth:2,borderColor:"#fff"}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},
+        tooltip:{callbacks:{label:function(ctx){return" "+ctx.label+": "+fmt(ctx.raw);}}}}}
+    });}catch(err){console.error("Donut:",err);}
+  }
+  if(leg){sorted.forEach(function(c,i){
+    var li=document.createElement("li");
+    li.innerHTML='<span class="sw" style="background:'+cols[i]+'"></span><span class="slbl">'+c+'</span><span class="samt">'+fmt(vals[i])+'</span>';
+    leg.appendChild(li);
+  });}
+}
+function rTransfers(){
+  var inc=mI(CUR).reduce(function(s,t){return s+t.amount;},0);
+  var tax=inc*0.25,tithe=(inc-tax)*0.05,sav=(inc-tax-tithe)*0.30;
+  var key="jfd:t-"+CUR;
+  var items=[
+    {lbl:"TAXES Account (****0021) — "+fmt(tax),sub:"25% of 1099 income. $0 currently — URGENT.",sk:key+"-tax",urg:true},
+    {lbl:"Tithe / Giving — "+fmt(tithe),sub:"5% of after-tax",sk:key+"-tithe",urg:false},
+    {lbl:"Savings — "+fmt(sav),sub:"30% to savings goals (Automobile first)",sk:key+"-sav",urg:false},
+  ];
+  var wrap=document.getElementById("tlist");if(!wrap)return;wrap.innerHTML="";
+  items.forEach(function(item){
+    var checked=false;try{checked=!!localStorage.getItem(item.sk);}catch(e){}
+    var row=div("ti");
+    var chk=document.createElement("input");chk.type="checkbox";chk.checked=checked;
+    chk.style.cssText="width:15px;height:15px;margin-top:2px;flex-shrink:0;cursor:pointer;accent-color:#2f6f4e";
+    var cnt=div("");cnt.style.flex="1";
+    var lbl=div("ti-main");lbl.innerHTML=item.lbl;if(item.urg)lbl.style.color="#b8423a";
+    var sub=div("ti-sub");sub.textContent=item.sub;if(checked)sub.style.textDecoration="line-through";
+    chk.addEventListener("change",function(){
+      try{if(this.checked)localStorage.setItem(item.sk,"1");else localStorage.removeItem(item.sk);}catch(e){}
+      sub.style.textDecoration=this.checked?"line-through":"";
+    });
+    cnt.appendChild(lbl);cnt.appendChild(sub);row.appendChild(chk);row.appendChild(cnt);wrap.appendChild(row);
+  });
+}
+function rSavTrack(){
+  var sv=compSav(CUR);
+  var e1=document.getElementById("sv-could"),e2=document.getElementById("sv-cxd");
+  if(e1)e1.textContent=fmt(sv.cc);if(e2)e2.textContent=fmt(sv.ca);
+}
+function rOvIns(){
+  var inc=mI(CUR).reduce(function(s,t){return s+t.amount;},0),sp=mSp(CUR),net=inc-sp;
+  var cats={};mT(CUR).forEach(function(t){if(t.type!=="Debit")return;var c=gc(t);cats[c]=(cats[c]||0)+Math.abs(t.amount);});
+  var sorted=Object.keys(cats).sort(function(a,b){return cats[b]-cats[a];});
+  var wrap=document.getElementById("ov-ins");if(!wrap)return;wrap.innerHTML="";
+  var lbl=document.getElementById("ov-ins-lbl");if(lbl)lbl.textContent="INSIGHTS FOR "+CUR.toUpperCase();
+  var items=[
+    {t:net<0?"bad":"good",tx:"Net is "+fmts(net)+" this month."},
+    inc===0?{t:"warn",tx:"No income in CSV for "+CUR+"."}:null,
+    sorted[0]?{t:"info",tx:"Top spend: "+sorted[0]+" "+fmt(cats[sorted[0]])+"."}:null,
+    {t:"urg",tx:"TAXES account = $0. Transfer 25% now."},
+  ];
+  items.forEach(function(i){if(i)wrap.appendChild(callout(i.t,i.tx));});
+}
+
+// BILLS
+var TAG_CLS={"URGENT":"urg","OVERDUE":"ov","Necessary":"nec","Business":"biz","Optional":"opt","Debt":"dbt","Deferred":"def","One-time":"ot"};
+function rBills(){
+  var paid=0,notYet=0,skip=0,pAmt=0,dAmt=0;
+  BILLS.forEach(function(b){var st=BPAY[b.name]||b.paid;if(st==="paid"){paid++;pAmt+=b.amount;}else if(st==="not yet"){notYet++;dAmt+=b.amount;}else skip++;});
+  var stats=document.getElementById("bills-stats");
+  if(stats){stats.innerHTML=""
+    +'<div class="bscard paid"><div class="bsn">'+paid+'</div><div class="bslbl">Paid \u2014 '+fmt(pAmt)+'</div></div>'
+    +'<div class="bscard due"><div class="bsn">'+notYet+'</div><div class="bslbl">Still Due \u2014 '+fmt(dAmt)+'</div></div>'
+    +'<div class="bscard skip"><div class="bsn">'+skip+'</div><div class="bslbl">Deferred</div></div>';}
+  var body=document.getElementById("bills-body");if(!body)return;body.innerHTML="";
+  BILLS.filter(function(b){
+    if(BF==="due"){return(BPAY[b.name]||b.paid)==="not yet";}
+    if(BF==="nec")return b.necessary;
+    if(BF==="opt")return!b.necessary;
+    return true;
+  }).forEach(function(b){
+    var st=BPAY[b.name]||b.paid;
+    var row=div("brow"+(b.urgent&&st!=="paid"?" urg-r":"")+(st==="paid"?" paid-r":""));
+    var chk=document.createElement("input");chk.type="checkbox";chk.className="bchk";chk.checked=(st==="paid");
+    (function(bill){chk.addEventListener("change",function(){
+      BPAY[bill.name]=this.checked?"paid":(bill.paid==="not yet"?"not yet":bill.paid);
+      try{localStorage.setItem("jfd:bp",JSON.stringify(BPAY));}catch(e){}
+      rBills();
+    });})(b);
+    row.appendChild(chk);
+    var nm=div("bname");nm.textContent=b.name;if(b.urgent&&st!=="paid")nm.style.color="#b8423a";if(b.note)nm.title=b.note;row.appendChild(nm);
+    var due=div("bdue");due.textContent=b.due;row.appendChild(due);
+    var amt=div("bamt");amt.textContent=b.amount>0?fmt(b.amount):"TBD";if(b.urgent&&st!=="paid")amt.style.color="#b8423a";row.appendChild(amt);
+    var tgd=div("");var tg=div("btag "+(TAG_CLS[b.tag]||"opt"));tg.textContent=b.tag;tgd.appendChild(tg);row.appendChild(tgd);
+    var dot=div("bstat-dot "+(st==="paid"?"p":st==="not yet"?"n":"s"));row.appendChild(dot);
+    body.appendChild(row);
+  });
+  var fl=document.getElementById("future-list");if(fl){fl.innerHTML="";
+    FUTURE.forEach(function(f){
+      var row=div("fe-row");
+      var ico=div("fe-icon");ico.innerHTML=f.priority==="High"?"&#127919;":"&#128337;";
+      var info=div("fe-info"),nm=div("fe-name"),why=div("fe-why");nm.textContent=f.name;why.textContent=f.why;info.appendChild(nm);info.appendChild(why);
+      var right=div("fe-right"),am=div("fe-amt"),fr=div("fe-freq"),pri=div("fe-pri "+(f.priority==="High"?"h":"l"));
+      am.textContent=fmt(f.amount);fr.textContent=f.freq;pri.textContent=f.priority+" Priority";
+      right.appendChild(am);right.appendChild(fr);right.appendChild(pri);
+      row.appendChild(ico);row.appendChild(info);row.appendChild(right);fl.appendChild(row);
+    });
+  }
+  rFunnel();
+}
+document.querySelectorAll(".bfbtn").forEach(function(btn){
+  btn.addEventListener("click",function(){
+    BF=btn.getAttribute("data-bf");
+    document.querySelectorAll(".bfbtn").forEach(function(b){b.classList.remove("active");});
+    btn.classList.add("active");rBills();
+  });
+});
+function rFunnel(){
+  var inc=mI(CUR).reduce(function(s,t){return s+t.amount;},0)||652.25;
+  var tax=inc*0.25,tithe=(inc-tax)*0.05,sav=(inc-tax-tithe)*0.30;
+  var steps=[
+    {cls:"red",n:"1",title:"TAXES Account (****0021)",sub:"25% same day. $0 currently. ~$362 owed YTD.",amt:fmt(tax),ac:"red"},
+    {cls:"orn",n:"2",title:"Tithe / Giving",sub:"5% of after-tax.",amt:fmt(tithe),ac:"orn"},
+    {cls:"red",n:"3",title:"Credit Card ****7580",sub:"Min $15 due Aug 2. Pay more when possible.",amt:"$15+",ac:"red"},
+    {cls:"grn",n:"4",title:"Overdue Bills",sub:"Phone $60 + iCloud $2.99",amt:fmt(62.99),ac:""},
+    {cls:"grn",n:"5",title:"Remaining Bills",sub:"Tablets, Claude, Evarlance, Spotify",amt:fmt(15+20+20+8.99+12.99),ac:""},
+    {cls:"grn",n:"6",title:"Savings Goals",sub:"30% to savings. Automobile goal first ($4.94/$1,200).",amt:fmt(sav),ac:""},
+    {cls:"pur",n:"7",title:"Withdraw Cash",sub:"$375 for envelopes: Gas, Groceries, Manny, Personal, Emergency, Auto.",amt:"$375 cash",ac:"pur"},
+  ];
+  var wrap=document.getElementById("funnel-steps");if(!wrap)return;wrap.innerHTML="";
+  steps.forEach(function(s){
+    var row=div("fstep"),num=div("fnum "+s.cls),con=div("fcon");num.textContent=s.n;
+    var t=div("ftitle");t.textContent=s.title;
+    var sub=div("fsub");sub.textContent=s.sub;
+    var amt=div("famount "+(s.ac||""));amt.textContent=s.amt;
+    con.appendChild(t);con.appendChild(sub);con.appendChild(amt);row.appendChild(num);row.appendChild(con);wrap.appendChild(row);
+  });
+}
+
+// SUPER SAVINGS
+function rSS(){
+  var total=0;["cut","reduce"].forEach(function(k){SS[k].forEach(function(i){if(i.save)total+=i.save;});});
+  var e1=document.getElementById("ss-total"),e2=document.getElementById("ss-yr");
+  if(e1)e1.textContent=fmt(total);if(e2)e2.textContent=fmt(total*12);
+  function build(id,items,showSave,col){
+    var wrap=document.getElementById("ss-"+id);if(!wrap)return;wrap.innerHTML="";
+    items.forEach(function(item){
+      var row=div("ss-item"),left=div("ss-left");
+      var cn=div("ss-cat");cn.textContent=item.cat;
+      var sp=div("ss-spent");sp.textContent="June: "+fmt(item.spent)+(item.target!=null?" | Target: "+fmt(item.target):"");
+      var tp=div("ss-tip");tp.textContent=item.tip;
+      left.appendChild(cn);left.appendChild(sp);left.appendChild(tp);row.appendChild(left);
+      if(showSave&&item.save!=null){
+        var right=div("ss-right"),sa=div("ss-save");sa.textContent=fmt(item.save);sa.style.color=col;
+        var sl=div("ss-slbl");sl.textContent="save/mo";right.appendChild(sa);right.appendChild(sl);row.appendChild(right);
+      }
+      wrap.appendChild(row);
+    });
+  }
+  build("cut",SS.cut,true,"#2f6f4e");build("reduce",SS.reduce,true,"#b86a2b");
+  build("watch",SS.watch,false,null);build("keep",SS.keep,false,null);
+}
+
+// GOALS
+function rGoals(){
+  var gl=document.getElementById("glist");if(gl){gl.innerHTML="";
+    GOALS.forEach(function(g){
+      var pct=g.target>0?Math.min(100,g.current/g.target*100):0;
+      var d=div("gr");
+      d.innerHTML='<div class="gh"><span class="gn">'+g.name+'</span><span class="ga">'+fmt(g.current)+" / "+fmt(g.target)+'</span></div>'
+        +'<div class="gbg"><div class="gfill" style="width:'+pct.toFixed(1)+'%;background:'+g.color+'"></div></div>'
+        +'<div style="display:flex;justify-content:space-between"><span class="gnote">'+g.note+'</span><span class="gpct">'+pct.toFixed(1)+'%</span></div>';
+      gl.appendChild(d);
+    });
+  }
+  var dl=document.getElementById("dlist");if(dl){dl.innerHTML="";
+    DEBTS.forEach(function(d){
+      var pp=d.total>0?Math.min(100,(1-d.remaining/d.total)*100):0;
+      var c=div("dc "+(d.urgent?"urg":"norm"));
+      c.innerHTML='<div class="dn">'+d.name+'</div>'
+        +'<div class="damts"><span>Paid: '+fmt(d.total-d.remaining)+'</span><span>Remaining: '+fmt(d.remaining)+'</span><span>Total: '+fmt(d.total)+'</span></div>'
+        +'<div class="dbg"><div class="dfill" style="width:'+pp.toFixed(1)+'%"></div></div>'
+        +'<div class="dnote" style="color:'+( d.urgent?"#5a1f1c":"#5a5a5a")+'">'+d.note+'</div>';
+      dl.appendChild(c);
+    });
+  }
+}
+
+// TRANSACTIONS
+function rTxnPills(){
+  var wrap=document.getElementById("txn-pills");if(!wrap)return;wrap.innerHTML="";
+  var ab=document.createElement("button");ab.className="pill"+(TXN_M==="All"?" active":"");ab.textContent="All months";
+  ab.addEventListener("click",function(){setTM("All",ab);});wrap.appendChild(ab);
+  DATA.monthOrder.forEach(function(m){
+    var b=document.createElement("button");b.className="pill"+(m===TXN_M?" active":"");b.textContent=m;
+    b.addEventListener("click",function(){setTM(m,b);});wrap.appendChild(b);
+  });
+}
+function setTM(m,btn){
+  TXN_M=m;try{localStorage.setItem("jfd:tm",m);}catch(e){}
+  document.querySelectorAll("#txn-pills .pill").forEach(function(p){p.classList.remove("active");});
+  if(btn)btn.classList.add("active");rTxnTable();
+}
+function rTxnTable(){
+  var srch=(document.getElementById("txn-search").value||"").toLowerCase();
+  var sf=document.getElementById("txn-sf").value;
+  var txns=[];
+  if(TXN_M==="All")DATA.monthOrder.forEach(function(m){mT(m).forEach(function(t){txns.push(t);});});
+  else txns=mT(TXN_M).slice();
+  txns=txns.filter(function(t){
+    if(srch&&t.displayDescription.toLowerCase().indexOf(srch)<0&&t.rawDescription.toLowerCase().indexOf(srch)<0)return false;
+    var s=gs(t);
+    if(sf==="Blank only"&&s!=="")return false;
+    if(sf==="Could cancel"&&s!=="could cancel")return false;
+    if(sf==="Cancelled"&&s!=="cancelled")return false;
+    return true;
+  });
+  txns.sort(function(a,b){
+    var av,bv;
+    if(TX_COL==="date"){av=a.sortDate;bv=b.sortDate;}
+    else if(TX_COL==="desc"){av=a.displayDescription;bv=b.displayDescription;}
+    else if(TX_COL==="category"){av=gc(a);bv=gc(b);}
+    else if(TX_COL==="amount"){av=Math.abs(a.amount);bv=Math.abs(b.amount);}
+    else{av=gs(a);bv=gs(b);}
+    return av<bv?-TX_DIR:av>bv?TX_DIR:0;
+  });
+  var body=document.getElementById("txn-body"),emp=document.getElementById("txn-empty");
+  if(!txns.length){body.innerHTML="";if(emp)emp.style.display="block";return;}
+  if(emp)emp.style.display="none";body.innerHTML="";
+  txns.forEach(function(tx){
+    var key=rk(tx),s=gs(tx),cat=gc(tx);
+    var tr=document.createElement("tr");
+    var t1=el("td","dcol");t1.textContent=tx.date;tr.appendChild(t1);
+    var t2=el("td","descol");t2.title=tx.rawDescription;t2.textContent=tx.displayDescription;tr.appendChild(t2);
+    var t3=document.createElement("td");
+    var cs=document.createElement("select");cs.className="csel";
+    CATS.forEach(function(c){var o=document.createElement("option");o.value=c;o.textContent=c;if(c===cat)o.selected=true;cs.appendChild(o);});
+    cs.addEventListener("change",function(){var nv=this.value;if(nv!==tx.category)CBK[key]=nv;else delete CBK[key];try{localStorage.setItem("jfd:c",JSON.stringify(CBK));}catch(e){}});
+    t3.appendChild(cs);tr.appendChild(t3);
+    var t4=el("td","acol "+(tx.type==="Debit"?"neg":"pos"));t4.textContent=(tx.type==="Debit"?"-":"+")+fmt(tx.amount);tr.appendChild(t4);
+    var t5=document.createElement("td");
+    var ss=document.createElement("select");ss.className="ssel";ss.setAttribute("data-s",s);
+    [["","--"],["could cancel","could cancel"],["cancelled","cancelled"]].forEach(function(p){
+      var o=document.createElement("option");o.value=p[0];o.textContent=p[1];if(p[0]===s)o.selected=true;ss.appendChild(o);
+    });
+    ss.addEventListener("change",function(){var nv=this.value;if(nv)SBK[key]=nv;else delete SBK[key];this.setAttribute("data-s",nv);try{localStorage.setItem("jfd:s",JSON.stringify(SBK));}catch(e){}});
+    t5.appendChild(ss);tr.appendChild(t5);body.appendChild(tr);
+  });
+}
+document.querySelectorAll(".tt th[data-col]").forEach(function(th){
+  th.addEventListener("click",function(){
+    var col=th.getAttribute("data-col");
+    if(TX_COL===col)TX_DIR*=-1;else{TX_COL=col;TX_DIR=col==="amount"?-1:1;}
+    rTxnTable();
+  });
+});
+var txnSrch=document.getElementById("txn-search"),txnSF=document.getElementById("txn-sf");
+if(txnSrch)txnSrch.addEventListener("input",rTxnTable);
+if(txnSF)txnSF.addEventListener("change",rTxnTable);
+var rbtn=document.getElementById("rbtn");
+if(rbtn)rbtn.addEventListener("click",function(){
+  var sm=[],co2=[];
+  Object.keys(SBK).forEach(function(k){var p=k.split("|");if(p.length<4)return;sm.push({year:parseInt(p[0]),month:p[1],description:p[2],amount:parseFloat(p[3]),status:SBK[k]});});
+  Object.keys(CBK).forEach(function(k){var p=k.split("|");if(p.length<4)return;co2.push({year:parseInt(p[0]),month:p[1],description:p[2],amount:parseFloat(p[3]),category:CBK[k]});});
+  var blob=new Blob([JSON.stringify({version:1,lastUpdated:new Date().toISOString(),statusMarks:sm,categoryOverrides:co2},null,2)],{type:"application/json"});
+  var url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="overrides.json";document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);toast("Downloaded!");
+});
+
+// MONTH VS MONTH
+function rMVM(){
+  var months=DATA.monthOrder;
+  var incs=months.map(function(m){return mI(m).reduce(function(s,t){return s+t.amount;},0);});
+  var sps=months.map(function(m){return mSp(m);});
+  var nets=months.map(function(m,i){return incs[i]-sps[i];});
+  var ctx=document.getElementById("mvm");if(!ctx)return;
+  // Force canvas resize after display:none→block transition
+  var par=ctx.parentElement;if(par){ctx.style.width=par.offsetWidth+"px";ctx.style.height="300px";}
+  if(MC){MC.destroy();MC=null;}
+  MC=new Chart(ctx.getContext("2d"),{type:"bar",
+    data:{labels:months,datasets:[{label:"Income",data:incs,backgroundColor:"#a8d5b5",borderRadius:4},{label:"Expenses",data:sps,backgroundColor:"#f0a8a2",borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"top"}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return"$"+v;}}}}}
+  });
+  var tiles=document.getElementById("mvm-tiles");if(tiles){tiles.innerHTML="";
+    months.forEach(function(m,i){var n=nets[i];var t=div("ntile "+(n>=0?"pos":"neg"));t.textContent=m+" "+(n>=0?"+$":"-$")+Math.abs(n).toFixed(0);tiles.appendChild(t);});
+  }
+  var cp=document.getElementById("cpills");if(cp){cp.innerHTML="";
+    CATS.forEach(function(c){var b=document.createElement("button");b.className="cpill"+(c===CTCAT?" active":"");b.textContent=c;
+      b.addEventListener("click",function(){CTCAT=c;cp.querySelectorAll(".cpill").forEach(function(p){p.classList.remove("active");});b.classList.add("active");rCatC();});
+      cp.appendChild(b);
+    });
+    rCatC();
+  }
+}
+function rCatC(){
+  var months=DATA.monthOrder,vals=months.map(function(m){return mCS(m,CTCAT);});
+  var ctx=document.getElementById("catc");if(!ctx)return;
+  if(CC2){CC2.destroy();CC2=null;}
+  var col=catcol(CTCAT);
+  CC2=new Chart(ctx.getContext("2d"),{type:"line",
+    data:{labels:months,datasets:[{label:CTCAT,data:vals,borderColor:col,backgroundColor:col+"33",fill:true,tension:.3,pointRadius:5,pointBackgroundColor:col}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{callback:function(v){return"$"+v;}}}}}
+  });
+}
+
+// BUDGET
+function rBudget(){
+  var months=DATA.monthOrder;
+  var cats=CATS.filter(function(c){return months.some(function(m){return mCS(m,c)>0;});});
+  var bh=document.getElementById("bh");if(!bh)return;
+  bh.innerHTML="<th>Category</th><th>Budget/mo</th>"+months.map(function(m){return"<th>"+m+"</th>";}).join("")+"<th>Avg</th><th>Status</th>";
+  var body=document.getElementById("bb");body.innerHTML="";var on=0,wa=0,ov=0;
+  cats.forEach(function(cat){
+    var budget=gb(cat),mv=months.map(function(m){return mCS(m,cat);});
+    var nz=mv.filter(function(v){return v>0;}),avg=nz.length?nz.reduce(function(s,v){return s+v;},0)/nz.length:0;
+    var pct=budget>0?(avg/budget*100):(avg>0?999:0);
+    var rb,cc2,badge,bcls;
+    if(pct<=100){rb="#e9f3ed";cc2="#2f6f4e";badge="ON TRACK";bcls="g";on++;}
+    else if(pct<=110){rb="#fbe9d8";cc2="#b86a2b";badge="WATCH";bcls="o";wa++;}
+    else{rb="#fbe7e3";cc2="#b8423a";badge="OVER";bcls="r";ov++;}
+    var tr=document.createElement("tr");tr.style.background=rb;
+    var tc=el("td","");tc.style.cssText="font-weight:600;color:"+cc2;tc.textContent=cat;tr.appendChild(tc);
+    var tbi=document.createElement("td");
+    var inp=document.createElement("input");inp.className="bi";inp.type="number";inp.value=budget;
+    (function(c){inp.addEventListener("change",function(){BOVER[c]=parseFloat(this.value)||0;try{localStorage.setItem("jfd:b",JSON.stringify(BOVER));}catch(e){}rBudget();});})(cat);
+    tbi.appendChild(inp);tr.appendChild(tbi);
+    months.forEach(function(m){var td=document.createElement("td"),v=mCS(m,cat);td.style.color=budget>0?(v>budget?"#b8423a":v>0?"#2f6f4e":"#9ca3af"):"#2a2a2a";td.textContent=v>0?fmt(v):"--";tr.appendChild(td);});
+    var ta=el("td","");ta.style.cssText="font-weight:700;color:"+cc2;ta.textContent=fmt(avg);tr.appendChild(ta);
+    var tp=document.createElement("td");var pill=div("pb "+bcls);pill.textContent=badge;tp.appendChild(pill);tr.appendChild(tp);
+    body.appendChild(tr);
+  });
+  var e;
+  e=document.getElementById("bt-on");if(e)e.textContent=on;
+  e=document.getElementById("bt-w");if(e)e.textContent=wa;
+  e=document.getElementById("bt-ov");if(e)e.textContent=ov;
+}
+
+// INSIGHTS
+function rInsights(){
+  var wrap=document.getElementById("ins-content");if(!wrap)return;
+  var months=DATA.monthOrder;
+  var incs=months.map(function(m){return mI(m).reduce(function(s,t){return s+t.amount;},0);});
+  var sps=months.map(function(m){return mSp(m);});
+  var nets=months.map(function(m,i){return incs[i]-sps[i];});
+  var totalNet=nets.reduce(function(s,v){return s+v;},0);
+  var catT={};CATS.forEach(function(c){var t=months.reduce(function(s,m){return s+mCS(m,c);},0);if(t>0)catT[c]=t;});
+  var sC=Object.keys(catT).sort(function(a,b){return catT[b]-catT[a];});
+  wrap.innerHTML="";
+  function ttl(t){var d=div("is-ttl");d.textContent=t;wrap.appendChild(d);}
+  function add(t,tx){wrap.appendChild(callout(t,tx));}
+  ttl("BIG PICTURE");
+  add("info","Net across all months: "+fmts(totalNet)+".");
+  var bestIdx=nets.indexOf(Math.max.apply(null,nets));
+  add(nets[bestIdx]>=0?"good":"warn","Best month: "+months[bestIdx]+" at "+fmts(nets[bestIdx])+".");
+  var neg=months.filter(function(m,i){return nets[i]<0;});if(neg.length)add("warn",neg.length+" negative month(s): "+neg.join(", ")+".");
+  ttl("TOP SPENDING");
+  if(sC[0])add("info",sC.slice(0,3).map(function(c){return c+": "+fmt(catT[c]);}).join(" | "));
+  ttl("ALERTS");
+  add("urg","TAXES account = $0. ~$362 owed YTD. Transfer now.");
+  add("urg","Credit card $494.70/$500 (98.9%). Min $15 due Aug 2.");
+  add("bad","Phone ($60) and iCloud ($2.99) OVERDUE.");
+  ttl("INCOME PLAN");
+  add("info","Mileage: 642.4 mi = $479 deduction. Taxable Colonial Life: ~$968.");
+  add("warn","UMSC $920/mo expected August. W-2 taxes auto-withheld.");
+}
+
+// INIT
+rOvMonths();rKPI();rTransfers();rSavTrack();rOvIns();
+rTxnPills();rTxnTable();
+setTimeout(function(){try{rDonut();}catch(e){console.error("Donut init:",e);}},300);
+
+})();
+</script>
+</body>
+</html>
