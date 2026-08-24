@@ -173,6 +173,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .fe-pri{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:700;margin-top:4px}
 .fe-pri.h{background:#e1efe6;color:#2f6f4e}.fe-pri.l{background:#f5f5f0;color:#8a857a}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#2f6f4e;color:#fff;padding:9px 18px;border-radius:8px;font-size:12px;z-index:999;display:none;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+
+@media(max-width:480px){
+  body{font-size:13px}
+  .hdr{padding:10px 12px 0;flex-wrap:wrap;gap:6px}
+  .htitle{font-size:15px}
+  .hbadge{font-size:10px;text-align:left}
+  .nav{padding:0 8px;gap:0}
+  .tbtn{padding:6px 8px;font-size:11px}
+  .panel{padding:12px 10px 40px}
+  .kgrid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .kcard{padding:10px}
+  .kval{font-size:17px}
+  .card{padding:12px}
+  div[style*="grid-template-columns:1fr 1fr"]{display:block!important}
+  div[style*="grid-template-columns:1fr 1fr"] .card{margin-bottom:12px}
+  .inc-grid{flex-direction:column;gap:8px}
+  .inc-cl,.inc-umsc{min-width:unset;width:100%}
+  .inc-val{font-size:22px}
+  .pills{gap:5px}
+  .pill{font-size:11px;padding:3px 10px}
+  .btiles{flex-direction:column;gap:8px}
+  .btt{font-size:11px;min-width:500px}
+  .sv-row{flex-direction:column;gap:8px}
+  .mvmt{flex-wrap:wrap;gap:4px}
+  .ntile{font-size:11px;padding:4px 8px}
+  table{font-size:11px}
+  .txn-tbl th,.txn-tbl td{padding:5px 4px}
+  .descol{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .csel,.ssel{font-size:10px;max-width:90px}
+  .goals-grid{grid-template-columns:1fr!important}
+  .g-bar-wrap{height:10px}
+  .bill-grid{grid-template-columns:1fr!important}
+}
 </style>
 </head>
 <body>
@@ -310,7 +343,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div style="background:#e3eef6;border:1px solid #a8c8e0;border-radius:10px;padding:14px">
         <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#3c6c8a;margin-bottom:4px">MILEAGE DEDUCTION</div>
         <div style="font-size:26px;font-weight:700;color:#3c6c8a">$479.00</div>
-        <div style="font-size:11px;color:#3c6c8a;margin-top:4px;opacity:.8">642.4 mi x $0.745. Send receipts folder at year-end.</div>
+        <div style="font-size:11px;color:#3c6c8a;margin-top:4px;opacity:.8">642.4 mi x $0.7473. 742.2 miles tracked via Evarlance. Send receipts at year-end.</div>
       </div>
     </div>
     <div class="c info">Colonial Life YTD: $1,446.99. After mileage deduction: ~$968 taxable. Est. tax: ~$242.</div>
@@ -354,7 +387,7 @@ var CC={"Gas":"#d97706","Groceries":"#16a34a","Fast Food":"#f97316","Restaurants
 var CATS=["Auto Maintenance","Auto Registration","Bakery & Treats","Bank Fees","Business Expense","Cash","Coffee Shops","Fast Food","Gas","Groceries","Gym","Insurance","Misc","Parking","Personal Care","Pharmacy","Recreation","Restaurants","Shopping","Subscriptions","Tolls","Utilities"];
 var DBUDGETS={"Gas":200,"Groceries":200,"Fast Food":100,"Restaurants":80,"Coffee Shops":50,"Bakery & Treats":30,"Shopping":100,"Subscriptions":40,"Business Expense":150,"Gym":30,"Pharmacy":20,"Auto Maintenance":50,"Parking":50,"Recreation":30,"Tolls":20,"Auto Registration":20,"Insurance":200,"Utilities":20,"Bank Fees":10,"Cash":20,"Auto & Transport":30,"Food & Dining":50,"Misc":20};
 var SS={"cut":[{"cat":"Fast Food","spent":15.27,"target":0,"save":15.27,"tip":"Little Caesars twice this month. Cook at home instead."},{"cat":"Bakery & Treats","spent":23.24,"target":0,"save":23.24,"tip":"Handel's + Somisomi = $23. Skip when cash is tight."},{"cat":"Recreation","spent":30.0,"target":0,"save":30.0,"tip":"Beach day was fun but $30 hurts at $0 balance."}],"reduce":[{"cat":"Shopping","spent":71.04,"target":10,"save":61.04,"tip":"Temu $65.85 when account was nearly empty. Pause online shopping."},{"cat":"Subscriptions","spent":39.95,"target":15,"save":24.95,"tip":"Dropbox + Spotify charged despite cancellations \u2014 dispute both."},{"cat":"Gas","spent":159.05,"target":100,"save":59.05,"tip":"3 fill-ups this month ($55+$63+$40). Combine trips, use Costco pump."}],"keep":[{"cat":"Groceries","spent":29.75,"tip":"Well managed. Keep it under $75/mo."},{"cat":"Business Expense","spent":56.47,"tip":"Claude + Subway (work meal). Keep receipts."},{"cat":"Insurance","spent":197.16,"tip":"E&O + Car Insurance. Non-negotiable, well done."}]};
-var BILLS=[{"name":"City of Ontario Ticket","amount":80.0,"due":"Aug 27","paid":"not yet","necessary":true,"urgent":true,"tag":"URGENT","note":"Ticket #300126814, plate 8NOK735. Contest expires Aug 27 \u2014 pay or contest NOW."},{"name":"Tax Set-Aside","amount":0,"due":"Each paycheck","paid":"not yet","necessary":true,"urgent":true,"tag":"URGENT","note":"TAXES acct = $0. Move 25% of every Colonial Life check here same day."},{"name":"Credit Card ****7580","amount":15.0,"due":"Aug 2","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Min $15 paid Aug 4. Balance $514.70 \u2014 pay down more ASAP."},{"name":"Phone","amount":60.0,"due":"Paid via Mom","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Included in $260 Zelle to mom."},{"name":"iCloud Storage","amount":2.99,"due":"1st","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Auto-charged Aug 1."},{"name":"E&O Insurance","amount":26.25,"due":"Done","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Paid Aug 7 via Napa Benefits."},{"name":"Car Insurance","amount":170.91,"due":"Done","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"State Farm $170.91 paid Aug 18."},{"name":"Gas","amount":210.0,"due":"Ongoing","paid":"not yet","necessary":true,"urgent":false,"tag":"Necessary","note":"Work commute."},{"name":"HP Instant Ink","amount":1.93,"due":"23rd","paid":"not yet","necessary":true,"urgent":false,"tag":"Business","note":""},{"name":"EOS Fitness","amount":9.99,"due":"25th","paid":"not yet","necessary":true,"urgent":false,"tag":"Necessary","note":"Monthly plan updated to $9.99/mo."},{"name":"DMV Registration","amount":274.0,"due":"Done","paid":"paid","necessary":false,"urgent":false,"tag":"One-time","note":"Done for the year."},{"name":"Spotify","amount":12.99,"due":"28th","paid":"not yet","necessary":false,"urgent":false,"tag":"Optional","note":""},{"name":"Claude (Anthropic)","amount":20.0,"due":"2nd","paid":"paid","necessary":true,"urgent":false,"tag":"Business","note":"Auto-charged Aug 2 on Mastercard."},{"name":"Tablet - Cellular","amount":15.0,"due":"Paid via Mom","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Paid through mom."},{"name":"Tablet - Payoff","amount":20.0,"due":"Paid via Mom","paid":"paid","necessary":true,"urgent":false,"tag":"Debt","note":"Paid through mom."},{"name":"Evarlance","amount":8.99,"due":"1st","paid":"paid","necessary":true,"urgent":false,"tag":"Business","note":"Auto-charged Aug 1 via Apple. Tracks mileage = $479 deduction."},{"name":"Repay Manny","amount":100.0,"due":"25th","paid":"skip","necessary":false,"urgent":false,"tag":"Debt","note":"$751.85 remaining."},{"name":"Groceries","amount":150.0,"due":"Ongoing","paid":"skip","necessary":true,"urgent":false,"tag":"Necessary","note":"Food budget."},{"name":"Food - Mom / Rent","amount":200.0,"due":"Paid","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Included in $260 to mom. Covers food + rent contribution."},{"name":"Dropbox","amount":11.99,"due":"21st","paid":"skip","necessary":false,"urgent":false,"tag":"Optional","note":"May be cancelled. Verify."},{"name":"Rent","amount":600.0,"due":"1st","paid":"skip","necessary":true,"urgent":false,"tag":"Deferred","note":"Deferred while building savings."}];
+var BILLS=[{"name":"City of Ontario Ticket","amount":80.0,"due":"Aug 27","paid":"not yet","necessary":true,"urgent":true,"tag":"URGENT","note":"Ticket #300126814, plate 8NOK735. Contest expires Aug 27 \u2014 pay or contest NOW."},{"name":"Tax Set-Aside","amount":0,"due":"Each paycheck","paid":"not yet","necessary":true,"urgent":true,"tag":"URGENT","note":"TAXES acct = $0. Move 25% of every Colonial Life check here same day."},{"name":"Credit Card ****7580","amount":15.0,"due":"Aug 2","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Min $15 paid Aug 4. Balance $514.70 \u2014 pay down more ASAP."},{"name":"Phone","amount":60.0,"due":"Paid via Mom","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Included in $260 Zelle to mom."},{"name":"iCloud Storage","amount":2.99,"due":"1st","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Auto-charged Aug 1."},{"name":"E&O Insurance","amount":26.25,"due":"Done","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Paid Aug 7 via Napa Benefits."},{"name":"Car Insurance","amount":170.91,"due":"Done","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"State Farm $170.91 paid Aug 18."},{"name":"Gas","amount":210.0,"due":"Ongoing","paid":"not yet","necessary":true,"urgent":false,"tag":"Necessary","note":"Work commute."},{"name":"HP Instant Ink","amount":1.93,"due":"23rd","paid":"not yet","necessary":true,"urgent":false,"tag":"Business","note":""},{"name":"EOS Fitness","amount":9.99,"due":"25th","paid":"not yet","necessary":true,"urgent":false,"tag":"Necessary","note":"Monthly plan updated to $9.99/mo."},{"name":"DMV Registration","amount":274.0,"due":"Done","paid":"paid","necessary":false,"urgent":false,"tag":"One-time","note":"Done for the year."},{"name":"Spotify","amount":12.99,"due":"28th","paid":"not yet","necessary":false,"urgent":false,"tag":"Optional","note":""},{"name":"Claude (Anthropic)","amount":20.0,"due":"2nd","paid":"paid","necessary":true,"urgent":false,"tag":"Business","note":"Auto-charged Aug 2 on Mastercard."},{"name":"Tablet - Cellular","amount":15.0,"due":"Paid via Mom","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Paid through mom."},{"name":"Tablet - Payoff","amount":20.0,"due":"Paid via Mom","paid":"paid","necessary":true,"urgent":false,"tag":"Debt","note":"Paid through mom."},{"name":"Evarlance","amount":8.99,"due":"1st","paid":"paid","necessary":true,"urgent":false,"tag":"Business","note":"Auto-charged Aug 1 via Apple. Tracks mileage = $554.64 deduction."},{"name":"Repay Manny","amount":100.0,"due":"25th","paid":"skip","necessary":false,"urgent":false,"tag":"Debt","note":"$751.85 remaining."},{"name":"Groceries","amount":150.0,"due":"Ongoing","paid":"skip","necessary":true,"urgent":false,"tag":"Necessary","note":"Food budget."},{"name":"Food - Mom / Rent","amount":200.0,"due":"Paid","paid":"paid","necessary":true,"urgent":false,"tag":"Necessary","note":"Included in $260 to mom. Covers food + rent contribution."},{"name":"Dropbox","amount":11.99,"due":"21st","paid":"skip","necessary":false,"urgent":false,"tag":"Optional","note":"May be cancelled. Verify."},{"name":"Rent","amount":600.0,"due":"1st","paid":"skip","necessary":true,"urgent":false,"tag":"Deferred","note":"Deferred while building savings."}];
 var FUTURE=[{"name":"Costco Gold Star Membership","amount":65.0,"freq":"Annual","why":"Gas savings at Costco pump easily offsets the fee. Cheaper groceries too.","priority":"High"},{"name":"Savings Account (Move Fund)","amount":50.0,"freq":"Monthly","why":"Get to $500 to open a share certificate at SchoolsFirst.","priority":"High"},{"name":"FX3 Camera & Lenses","amount":200.0,"freq":"Monthly","why":"Lease payments for wedding gear. Start when wedding income is steady.","priority":"Low"}];
 var GOALS=[
   {name:"Car Repairs (URGENT)",current:0,target:1200,note:"Tires, brakes, CV axle, tune-up, oil, transmission fluid, serpentine belt. Get this done before it gets worse.",color:"#b8423a"},
@@ -363,7 +396,7 @@ var GOALS=[
   {name:"FX3 & Lenses",current:0,target:6475,note:"Wedding gear. Lease when income is steady.",color:"#9333ea"}
 ];
 var DEBTS=[
-  {name:"Mastercard ****7580",paid:0,total:514.70,remaining:514.70,urgent:true,note:"PAST DUE as of Aug 2. Balance $514.70 (103% of limit). Pay $15 min NOW then pay down aggressively."},
+  {name:"Mastercard ****7580",paid:67.60,total:514.70,remaining:447.10,urgent:true,note:"Balance $447.10. $92 available credit. Pay down below $150 ASAP."},
   {name:"Manny",paid:400,total:1051.85,remaining:651.85,urgent:false,note:"$400 paid. $651.85 remaining."}
 ];
 var CUR=DATA.monthOrder[DATA.monthOrder.length-1]||"Jul";
@@ -814,7 +847,7 @@ function rInsights(){
   add("urg","Credit card $514.70/$500 (98.9%). Min $15 due Aug 2.");
   add("bad","Phone ($60) and iCloud ($2.99) OVERDUE.");
   ttl("INCOME PLAN");
-  add("info","Mileage: 642.4 mi = $479 deduction. Taxable Colonial Life: ~$968.");
+  add("info","Mileage: 742.2 mi = $554.64 deduction. Taxable Colonial Life: ~$892.");
   add("warn","UMSC $920/mo expected August. W-2 taxes auto-withheld.");
 }
 
