@@ -892,62 +892,79 @@ setTimeout(function(){try{rDonut();}catch(e){console.error("Donut init:",e);}},3
 function rRoadmap(){
   var el=document.getElementById("roadmap-content");
   if(!el)return;
-  var score=586;
   var html='<div style="padding:16px 0;">';
-  html+='<h2 style="font-size:18px;font-weight:700;margin-bottom:4px;">Credit & Savings Roadmap</h2>';
-  html+='<p style="color:#666;font-size:13px;margin-bottom:20px;">Your step-by-step plan to financial freedom — credit score, savings accounts, and the Tesla.</p>';
+  html+='<h2 style="font-size:18px;font-weight:700;margin-bottom:4px;">Credit &amp; Savings Roadmap</h2>';
+  html+='<p style="color:#666;font-size:13px;margin-bottom:20px;">Exact steps, exact timing. Follow this and you&#39;re set.</p>';
 
   // Credit Score Section
   html+='<div style="background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #e6e4dd;">';
   html+='<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">';
-  html+='<div style="background:#9333ea;color:#fff;border-radius:8px;padding:6px 12px;font-weight:700;font-size:20px;">'+score+'</div>';
-  html+='<div><div style="font-weight:700;font-size:15px;">Credit Score Journey</div><div style="color:#666;font-size:12px;">Fair → Good → Great</div></div></div>';
+  html+='<div style="background:#9333ea;color:#fff;border-radius:8px;padding:6px 12px;font-weight:700;font-size:20px;">586</div>';
+  html+='<div><div style="font-weight:700;font-size:15px;">Credit Score Journey</div><div style="color:#666;font-size:12px;">Fastest possible path &mdash; every step matters</div></div></div>';
+
   var milestones=[
-    {date:"Oct 2026",score:"586",action:"Apply for Capital One Platinum Mastercard — designed for fair credit, no annual fee. Use for Spotify ($9.50) only. Pay in full every month.",status:"now",color:"#b8423a"},
-    {date:"Apr 2027",score:"~630",action:"6 months of on-time payments done. Request credit limit increase on existing Mastercard ****7580. Higher limit = lower utilization = score boost.",status:"upcoming",color:"#b86a2b"},
-    {date:"Oct 2027",score:"~670",action:"12 months of clean history. Score crosses 660. Start shopping for better rewards cards. Eligible for most standard cards.",status:"future",color:"#059669"},
-    {date:"Apr 2028",score:"~710+",action:"18 months in. Score crosses 700. Apply for Costco Anywhere Visa (Citi) — 4% back on gas, 3% restaurants & travel, 2% Costco. This is the endgame card.",status:"future",color:"#9333ea"},
+    {date:"Oct 2026",score:"586",action:"Apply Capital One Platinum Mastercard NOW. No annual fee, designed for fair credit. Set Spotify ($9.50) on autopay. Pay in full every month. This starts your clock.",color:"#b8423a",done:false},
+    {date:"Oct/Nov 2026",score:"~620-650",action:"Pay off Mastercard ****7580 ($507). This alone drops utilization from 101% to 0% &mdash; expect a 30-50 point jump immediately. Then put ONE gas fill-up ($50-60) on it monthly and pay in full. Utilization goes to ~10%.",color:"#b86a2b",done:false},
+    {date:"Jan 1-14, 2027",score:"~645-665",action:"BEFORE the trip: Request credit limit increase on Capital One (3 months clean payments). Also request limit increase on Mastercard ****7580 (3 months paid in full). Higher limits = lower utilization = faster score growth. Do this before Jan 15.",color:"#059669",done:false},
+    {date:"Feb 2027",score:"~650-670",action:"Apply for B&amp;H Photo Synchrony financing for FX3 + 50mm G Master. Synchrony approves at 620+ with income. You&#39;ll have ~3-4 months of clean history + payroll income. If approved: $278/mo at 0% APR for 18 months. Camera in hand Feb/Mar.",color:"#0891b2",done:false},
+    {date:"Apr 2027",score:"~665-685",action:"6 months of perfect payment history. Request another limit increase on both cards. Score accelerating. Eligible for most mid-tier rewards cards.",color:"#059669",done:false},
+    {date:"Aug-Sep 2027",score:"~690-710",action:"Tesla goal hit (~$15k saved). Purchase 2020 Tesla Model 3. Credit score now strong enough for Costco Anywhere Visa &mdash; apply after Tesla is purchased (don&#39;t want a hard inquiry right before a major purchase).",color:"#9333ea",done:false},
+    {date:"Oct 2027 +",score:"700+",action:"Apply for Costco Anywhere Visa: 4% back on gas, 3% restaurants &amp; travel, 2% Costco. This becomes your primary card. The Mastercard and Capital One stay open to keep account age.",color:"#7c3aed",done:false},
   ];
+
   milestones.forEach(function(m){
     html+='<div style="display:flex;gap:12px;margin-bottom:12px;align-items:flex-start;">';
-    html+='<div style="min-width:80px;text-align:center;">';
-    html+='<div style="background:'+m.color+';color:#fff;border-radius:6px;padding:3px 6px;font-size:11px;font-weight:700;">'+m.date+'</div>';
+    html+='<div style="min-width:86px;text-align:center;">';
+    html+='<div style="background:'+m.color+';color:#fff;border-radius:6px;padding:3px 6px;font-size:10px;font-weight:700;line-height:1.3;">'+m.date+'</div>';
     html+='<div style="font-size:13px;font-weight:700;margin-top:4px;color:'+m.color+';">'+m.score+'</div>';
     html+='</div>';
     html+='<div style="flex:1;font-size:13px;color:#444;padding-top:2px;">'+m.action+'</div>';
     html+='</div>';
   });
   html+='<div style="background:#f0fdf4;border-radius:8px;padding:10px 12px;font-size:12px;color:#166534;margin-top:8px;">';
-  html+='<strong>Key rules:</strong> Pay on time (35% of score). Keep utilization under 30% on each card. Don&#39;t open more than 1 card at a time. Don&#39;t close old accounts.';
+  html+='<strong>Rules that move the needle fastest:</strong> Pay in full (not just minimum) every month. Keep each card under 30% utilization. Never miss a due date. Don&#39;t open more than one card at a time. Don&#39;t close old accounts &mdash; age matters.';
+  html+='</div></div>';
+
+  // FX3 Section
+  html+='<div style="background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #e6e4dd;">';
+  html+='<div style="font-weight:700;font-size:15px;margin-bottom:6px;">🎬 FX3 + 50mm G Master &mdash; February 2027</div>';
+  html+='<div style="color:#666;font-size:12px;margin-bottom:14px;">Finance through B&amp;H Photo (Synchrony Bank) at 0% APR. Tax-deductible. Earns money while you pay it off.</div>';
+  html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">';
+  html+='<div style="background:#f0f9ff;border-radius:8px;padding:10px;"><div style="font-size:11px;color:#0369a1;font-weight:700;">GEAR</div><div style="font-size:13px;margin-top:4px;">Sony FX3 Body: $3,489<br>50mm G Master f/1.4: $1,399<br><strong>Total: ~$4,888</strong></div></div>';
+  html+='<div style="background:#f0fdf4;border-radius:8px;padding:10px;"><div style="font-size:11px;color:#166534;font-weight:700;">FINANCING (0% APR)</div><div style="font-size:13px;margin-top:4px;">18 months: <strong>$272/mo</strong><br>24 months: <strong>$204/mo</strong><br>No interest if paid in full</div></div>';
+  html+='</div>';
+  html+='<div style="font-size:13px;color:#444;margin-bottom:10px;"><strong>How to apply:</strong> Go to bhphotovideo.com, add items to cart, select &ldquo;Pay over time with Synchrony&rdquo; at checkout. They&#39;ll do a soft pull first, then hard pull on approval. Approval threshold: ~620+ credit score. You&#39;ll be at ~650-670 by February. Income from AMSC payroll helps approval.</div>';
+  html+='<div style="background:#fff7ed;border-radius:8px;padding:10px 12px;font-size:12px;color:#9a3412;">';
+  html+='<strong>Impact on Tesla savings:</strong> $272/mo FX3 payment reduces Tesla monthly savings from $1,940 &rarr; $1,668. Tesla arrives ~Oct 2027 instead of Aug 2027 &mdash; still within your goal. Totally worth it since FX3 is earning money for Colonial + Filmed by Jaymes from day one.';
   html+='</div></div>';
 
   // Savings Accounts Section
   html+='<div style="background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #e6e4dd;">';
   html+='<div style="font-weight:700;font-size:15px;margin-bottom:14px;">Savings Account Plan</div>';
   var accts=[
-    {name:"Emergency Fund",where:"Schools First FCU",when:"Open now (October)",apy:"0.10%",goal:"$500 → $1,000",note:"Rename existing savings account. Keep here for convenience — not for growth. Never touch unless true emergency.",color:"#b8423a",icon:"🛡️"},
-    {name:"Tesla Fund (HYSA)",where:"Ally Bank or Marcus by Goldman Sachs",when:"Open November (after CC paid off)",apy:"4.0–4.5%",goal:"$0 → $15,000",note:"High-yield savings for car goal. Transfer monthly surplus here. At $1,940/mo, you hit $15k by Aug–Sep 2027.",color:"#9333ea",icon:"⚡"},
-    {name:"Roth IRA",where:"Fidelity or Vanguard",when:"Open 2028+ (after Tesla purchase)",apy:"Market returns ~7-10%/yr avg",goal:"Max $7,000/year",note:"Tax-free growth for retirement. Too early to prioritize now — get the car first, then build long-term wealth.",color:"#059669",icon:"📈"},
+    {name:"Emergency Fund",where:"Schools First FCU",when:"Open now &mdash; October",apy:"0.10%",goal:"$500 then $1,000",note:"Rename existing savings account. Convenience over rate here. Never touch unless true emergency.",color:"#b8423a",icon:"&#128737;"},
+    {name:"Tesla Fund (HYSA)",where:"Ally Bank or Marcus by Goldman Sachs",when:"Open Feb 2027 (return from trip)",apy:"4.0-4.5%",goal:"$0 &rarr; $15,000",note:"Transfer monthly surplus after FX3 payment. At $1,668/mo you hit $15k by Oct 2027. Way better rate than Schools First (0.10%).",color:"#9333ea",icon:"&#9889;"},
+    {name:"Roth IRA",where:"Fidelity or Vanguard",when:"2028+ (after Tesla)",apy:"~7-10% avg long-term",goal:"Max $7,000/year",note:"Tax-free retirement growth. After Tesla and finances are stable. Future Jaymes will thank you.",color:"#059669",icon:"&#128200;"},
   ];
   accts.forEach(function(a){
     html+='<div style="border:1px solid #e6e4dd;border-radius:10px;padding:12px;margin-bottom:10px;">';
     html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">';
     html+='<div style="font-weight:700;font-size:14px;">'+a.icon+' '+a.name+'</div>';
     html+='<span style="background:'+a.color+';color:#fff;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700;">'+a.when+'</span></div>';
-    html+='<div style="font-size:12px;color:#666;margin-bottom:4px;">'+a.where+' &nbsp;·&nbsp; <strong>APY: '+a.apy+'</strong> &nbsp;·&nbsp; Goal: '+a.goal+'</div>';
+    html+='<div style="font-size:12px;color:#666;margin-bottom:4px;">'+a.where+' &nbsp;&middot;&nbsp; <strong>APY: '+a.apy+'</strong> &nbsp;&middot;&nbsp; Goal: '+a.goal+'</div>';
     html+='<div style="font-size:12px;color:#444;">'+a.note+'</div></div>';
   });
   html+='</div>';
 
   // Tesla Timeline
   html+='<div style="background:#fff;border-radius:12px;padding:16px;margin-bottom:16px;border:1px solid #e6e4dd;">';
-  html+='<div style="font-weight:700;font-size:15px;margin-bottom:6px;">⚡ Tesla Model 3 Timeline</div>';
-  html+='<div style="color:#666;font-size:12px;margin-bottom:14px;">2020 Model 3 · ~100k miles · $10–16k · Clean title · Battery warranty may still apply</div>';
+  html+='<div style="font-weight:700;font-size:15px;margin-bottom:6px;">&#9889; Tesla Model 3 Timeline</div>';
+  html+='<div style="color:#666;font-size:12px;margin-bottom:14px;">2020 Model 3 &middot; ~100k miles &middot; $10-16k budget &middot; Charging at Americana at Brand (Glendale) Mon-Fri free or low-cost</div>';
   var tevents=[
-    {date:"Jan 15, 2027",label:"Return from Chiapas","note":"~$3,000 in savings. Open Ally HYSA Tesla Fund."},
-    {date:"Mar 2027",label:"3 months saving","note":"~$5,800 saved. CC & all debts gone. Full $1,940/mo going to Tesla fund."},
-    {date:"Jun 2027",label:"Halfway","note":"~$9,600 saved. Start seriously browsing Facebook Marketplace & CarGurus."},
-    {date:"Aug–Sep 2027",label:"Target buy month","note":"~$15,000 reached. Purchase 2020 Tesla Model 3. Insurance switches to $238/mo (up $56) but gas goes from $267 → ~$0–140/mo. Net savings: $127/mo on running costs."},
+    {date:"Jan 28, 2027",label:"Return from Chiapas","note":"~$3,000 in savings. Open Ally HYSA Tesla Fund. FX3 payments begin ($272/mo)."},
+    {date:"May 2027",label:"3 months saving","note":"~$8,000 saved. FX3 in active use earning for AMSC + Colonial + brand. Tesla fund growing $1,668/mo."},
+    {date:"Aug 2027",label:"Getting close","note":"~$13,000 saved. Start seriously looking on Facebook Marketplace, CarGurus, AutoTrader."},
+    {date:"Oct 2027",label:"Target buy month","note":"~$15,000 reached. Buy 2020 Tesla Model 3. Insurance $238/mo (up $56) but gas $267 &rarr; $0-140/mo. Net savings on running costs: ~$127/mo."},
   ];
   tevents.forEach(function(t,i){
     html+='<div style="display:flex;gap:12px;margin-bottom:10px;">';
@@ -962,7 +979,7 @@ function rRoadmap(){
     html+='</div></div>';
   });
   html+='<div style="background:#f5f0ff;border-radius:8px;padding:10px 12px;font-size:12px;color:#6b21a8;margin-top:4px;">';
-  html+='<strong>Charging plan:</strong> Americana at Brand (Glendale) has 20 Tesla Superchargers. Charge Mon–Fri during work shifts (~6 hrs = full battery). No home charger needed. Weekend top-up at Supercharger if needed (~$8–12/session). Monthly cost: $0–140 vs $267 current gas.';
+  html+='<strong>Charging:</strong> Americana at Brand has 20 Tesla Superchargers. Charge Mon-Fri during work (~6 hrs = full battery). No home charger install needed. Monthly cost $0-140 vs $267 current gas.';
   html+='</div></div>';
 
   html+='</div>';
