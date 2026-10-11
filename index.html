@@ -161,6 +161,33 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .charts-grid,.ov-bottom{grid-template-columns:1fr}
 }
+/* Mobile: hide sidebar, show bottom nav */
+.bottom-nav{display:none}
+@media(max-width:600px){
+  .sidebar{display:none}
+  .main{margin-left:0;padding:16px 14px 80px}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:9px}
+  .sv{font-size:20px}
+  .charts-grid,.ov-bottom{grid-template-columns:1fr}
+  .page-header{flex-direction:column;align-items:flex-start;gap:8px;margin-bottom:18px}
+  .page-title{font-size:17px}
+  .mtabs{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  .bills-grid,.goals-grid,.tips-grid{grid-template-columns:1fr}
+  .debt-meta{grid-template-columns:repeat(3,1fr)}
+  .filters{flex-direction:column;gap:6px}
+  .fi{width:100%}
+  .txn-table th:nth-child(2),.txn-table td:nth-child(2){display:none}
+  .bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--bg2);border-top:1px solid var(--border);padding:6px 0 env(safe-area-inset-bottom,8px)}
+  .bn-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:5px 2px;border:none;background:none;color:var(--muted);cursor:pointer;font-family:inherit;font-size:9px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;transition:color .15s;-webkit-tap-highlight-color:transparent;min-height:48px}
+  .bn-item.active{color:var(--blue)}
+  .bn-icon{font-size:17px;line-height:1}
+  .ov-bottom{gap:10px}
+  .card{padding:14px 14px}
+  .sc{padding:14px 14px}
+  .txn-table td{padding:9px 8px}
+  .cw{height:160px}
+  .cat-legend{max-height:130px}
+}
 </style>
 </head>
 <body>
@@ -364,8 +391,11 @@ var BC=null,DC=null;
 function V(v){
   document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
   document.querySelectorAll('.nav-item').forEach(function(e){e.classList.remove('active');});
+  document.querySelectorAll('.bn-item').forEach(function(e){e.classList.remove('active');});
   document.getElementById('view-'+v).classList.add('active');
   document.getElementById('nav-'+v).classList.add('active');
+  var bn=document.getElementById('bn-'+v);if(bn)bn.classList.add('active');
+  window.scrollTo(0,0);
   if(v==='tx')renderTxns();
   if(v==='bills')renderBills();
   if(v==='goals')renderGoals();
@@ -613,5 +643,14 @@ renderOv(cur);
 renderTxns();
 })();
 </script>
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bn-item active" id="bn-ov" onclick="V('ov')"><span class="bn-icon">&#9649;</span>Overview</button>
+  <button class="bn-item" id="bn-tx" onclick="V('tx')"><span class="bn-icon">&#8644;</span>Txns</button>
+  <button class="bn-item" id="bn-goals" onclick="V('goals')"><span class="bn-icon">&#9678;</span>Goals</button>
+  <button class="bn-item" id="bn-debts" onclick="V('debts')"><span class="bn-icon">&#9650;</span>Debts</button>
+  <button class="bn-item" id="bn-bills" onclick="V('bills')"><span class="bn-icon">&#9641;</span>Bills</button>
+  <button class="bn-item" id="bn-tips" onclick="V('tips')"><span class="bn-icon">&#9733;</span>Tips</button>
+  <button class="bn-item" id="bn-credit" onclick="V('credit')"><span class="bn-icon">&#9654;</span>Credit</button>
+</nav>
 </body>
 </html>
