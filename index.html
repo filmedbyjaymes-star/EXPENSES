@@ -388,7 +388,7 @@ function cc(cat){
 
 var BC=null,DC=null;
 
-function V(v){
+window.V=function V(v){
   document.querySelectorAll('.view').forEach(function(e){e.classList.remove('active');});
   document.querySelectorAll('.nav-item').forEach(function(e){e.classList.remove('active');});
   document.querySelectorAll('.bn-item').forEach(function(e){e.classList.remove('active');});
@@ -402,7 +402,7 @@ function V(v){
   if(v==='tips')renderTips();
   if(v==='debts')renderDebts();
   if(v==='credit')renderCredit();
-}
+};
 
 function renderOv(m){
   cur=m;
