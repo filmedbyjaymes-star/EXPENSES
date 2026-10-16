@@ -369,6 +369,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple
   </div>
 </div>
 
+<div id="build-stamp" style="font-size:10px;color:var(--muted);text-align:center;padding:14px 0 4px">Data updated Oct 15, 2026 &middot; build 3</div>
 </main></div>
 <script>
 (function(){
@@ -382,15 +383,15 @@ var WEEK={
   updated:"Oct 15, 2026",
   status:"green",
   headline:"On track. Waiting on two things.",
-  sub:"The Mastercard payment is sent and posting. Your paycheck (about $1,230) lands this weekend or Monday, timing unconfirmed. Your money is split across 6 accounts.",
+  sub:"The Mastercard is paid off (the app shows it for a day or two until it posts). Your paycheck (about $1,230) lands this weekend or Monday, timing unconfirmed. Your money is split across 6 accounts.",
   cash:{checking:1061.45,business:78.80,savings:4340.01},
-  cards:239.45,
+  cards:0,
   payday:{label:"Weekend or Mon",est:1230,note:"unconfirmed"},
   weekSpend:180,
   payout:{
     total:5770.33,
     items:[
-      {t:"Schools First card payment",a:239.45,n:"sent, awaiting posting"},
+      {t:"Schools First card paid off",a:239.45,n:"paid Oct 15, still shows in the app until it posts"},
       {t:"E&O insurance",a:26.25,n:"paid"},
       {t:"Rental car ticket",a:55,n:"paid ($50 + $5 fee)"},
       {t:"Emergency fund, 01 Primary Savings",a:1500,n:"done, top up $500 from the paycheck"},
@@ -419,7 +420,7 @@ var WEEK={
     {k:"Rule",c:"var(--muted)",t:"Only put on a card what is already sitting in your account. Never use a card to cover a cash shortage."}
   ],
   debtStart:1051.85+507.42+55,
-  debtNow:670+239.45,
+  debtNow:670,
   debtFree:"Dec 25"
 };
 
@@ -484,7 +485,7 @@ function renderWeek(){
       '<div class="wk-stat"><div class="l">Cash now</div><div class="v">'+fmt(cashTotal)+'</div><div class="n">Checking '+fmt(WEEK.cash.checking)+' &middot; Biz '+fmt(WEEK.cash.business)+' &middot; Savings '+fmt(WEEK.cash.savings)+'</div></div>'+
       '<div class="wk-stat"><div class="l">Next check</div><div class="v" style="color:var(--green)">'+fmt(WEEK.payday.est)+'</div><div class="n">'+WEEK.payday.label+' ('+WEEK.payday.note+')</div></div>'+
       '<div class="wk-stat"><div class="l">Spend this week</div><div class="v">'+fmt(WEEK.weekSpend)+'</div><div class="n">groceries, gas, food</div></div>'+
-      '<div class="wk-stat"><div class="l">Owed on cards</div><div class="v" style="color:var(--yellow)">'+fmt(WEEK.cards)+'</div><div class="n">payment sent, posting</div></div>'+
+      '<div class="wk-stat"><div class="l">Owed on cards</div><div class="v" style="color:var(--green)">'+fmt(WEEK.cards)+'</div><div class="n">$239.45 paid, posting in the app</div></div>'+
     '</div>'+
     payoutHtml()+'<div class="wk-card"><h3>Due in the next 7 days</h3>'+billsHtml+'</div>'+
     '<div class="wk-card"><h3>What to do, in order</h3>'+planHtml+'</div>'+payGuideHtml()+
@@ -492,7 +493,7 @@ function renderWeek(){
       '<div class="wk-card"><h3>Cancun trip</h3><div style="font-size:20px;font-weight:800">'+fmt(ch.current)+' <span style="font-size:12px;color:var(--muted);font-weight:500">of '+fmt(ch.target)+'</span></div>'+
         '<div class="wk-bar"><div style="width:'+chPct+'%;background:var(--green)"></div></div><div class="wk-s">Jan 15-27. $500 in Oct, $900 Nov, $800 Dec, $1,300 Jan.</div></div>'+
       '<div class="wk-card"><h3>Debt payoff</h3><div style="font-size:20px;font-weight:800">'+fmt(WEEK.debtNow)+' <span style="font-size:12px;color:var(--muted);font-weight:500">left</span></div>'+
-        '<div class="wk-bar"><div style="width:'+dPct+'%;background:var(--red)"></div></div><div class="wk-s">Manny + Mastercard payment posting. Debt-free '+WEEK.debtFree+'.</div></div>'+
+        '<div class="wk-bar"><div style="width:'+dPct+'%;background:var(--red)"></div></div><div class="wk-s">Only Manny is left. Debt-free '+WEEK.debtFree+'.</div></div>'+
     '</div>'+
     '<div class="wk-s" style="text-align:center;margin-top:4px">Tell Claude your new balances to refresh this page.</div>';
   document.querySelectorAll('#wk-body .wk-btn').forEach(function(btn){
@@ -705,7 +706,7 @@ function renderGoals(){
 
 function renderDebts(){
   var debts=[
-    {name:"Mastercard ****7580",balance:239.45,original:507.42,color:"#ef4444",due:"Payment sent Oct 15, awaiting posting",min:25,monthly:239.45,note:"Payment of $239.45 sent Oct 15. The app still shows the balance until it posts. Limit $500, with $100 held as a deposit by the rental car company until you return the car."},
+    {name:"Mastercard ****7580",balance:0,original:507.42,color:"#ef4444",due:"PAID OFF Oct 15, 2026 (posting)",min:25,monthly:0,note:"Paid $239.45 on Oct 15. The Schools First app keeps showing the old balance for a day or two until the payment posts. Limit $500, with $100 held as a deposit by the rental car company until you return the car."},
     {name:"Manny",balance:670,original:1051.85,color:"#f97316",due:"December 31, 2026",min:225,monthly:225,note:"$381 already paid. $670 remaining: $225 Oct 25, $225 Nov 25, final $220 Dec 25. Debt-free by year end!"},
     ,{name:"Rental Car Ticket",balance:0,original:55,color:"#eab308",due:"PAID Oct 15, 2026",min:55,monthly:0,note:"Paid Oct 15 from Main Checking ($50 ticket plus $5 fee)."}
 ,{name:"Parking Ticket",balance:80,original:80,color:"#6b7280",due:"On hold, contesting",min:0,monthly:0,note:"$80 parking ticket. You are contesting it. DO NOT PAY until it is resolved."}
