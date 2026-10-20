@@ -352,7 +352,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple
     <div style="flex:0 0 auto">
       <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Current Score</div>
       <div style="font-size:60px;font-weight:800;color:var(--green);letter-spacing:-.03em;line-height:1">684</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:5px">Good range / Oct 19, 2026</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:5px">Good range / Oct 20, 2026</div>
       <div style="height:8px;background:var(--bg3);border-radius:4px;margin-top:14px;overflow:hidden;width:220px">
         <div style="height:100%;width:70%;background:linear-gradient(90deg,var(--red),var(--yellow),var(--green));border-radius:4px"></div>
       </div>
@@ -369,7 +369,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,-apple
   </div>
 </div>
 
-<div id="build-stamp" style="font-size:10px;color:var(--muted);text-align:center;padding:14px 0 4px">Data updated Oct 19, 2026 &middot; build 5</div>
+<div id="build-stamp" style="font-size:10px;color:var(--muted);text-align:center;padding:14px 0 4px">Data updated Oct 20, 2026 &middot; build 6</div>
 </main></div>
 <script>
 (function(){
@@ -380,14 +380,14 @@ var GOALS_DATA=[{"name":"New Car (NOW)","current":0,"target":25000,"color":"#f97
 var SS={"cut":[{"cat":"Coffee Shops","spent":36.0,"target":10,"save":26.0,"tip":"September: Klatch $6.75 + Red Berry $29.25 = $36 personal coffee spend. La La Land $30 was covered by AMSC. Target $10/mo \u2014 make coffee at home."},{"cat":"Bakery & Treats","spent":17.3,"target":0,"save":17.3,"tip":"Handel's $11.50 + Donuttery $5.80. Skip these entirely when cash is tight."}],"reduce":[{"cat":"Fast Food","spent":67.12,"target":20,"save":47.12,"tip":"Sep: McDonald's x3 ($35.19) + Paradise Buffet ($20.70) + 7-Eleven ($6) + Donuttery ($5.80) = $67. Budget $20/mo, cook at home."},{"cat":"Gas","spent":196.88,"target":100,"save":96.88,"tip":"Sep: 6 fill-ups totaling $196.88. Costco pump saves ~$0.30/gal. Combine trips. Budget $100/mo once using Costco."},{"cat":"Shopping","spent":31.79,"target":10,"save":21.79,"tip":"Walmart x2 ($26.07) + Dollar Tree ($5.73). Plan purchases, avoid impulse stops."}],"keep":[{"cat":"Business Expense","spent":46.25,"tip":"Claude $20 + E&O $26.25. Both deductible. Keep receipts for Schedule C."},{"cat":"Insurance","spent":181.85,"tip":"State Farm $181.85. Non-negotiable. Track mileage to dispute rate."},{"cat":"Personal Care","spent":8.94,"tip":"$35 haircut every 2 weeks. Clean and professional for AMSC."}]};
 
 var WEEK={
-  updated:"Oct 19, 2026",
-  status:"green",
-  headline:"Paycheck landed. Car decision is next.",
-  sub:"Cash and savings total $6,131.71. Checking is $701.75. Your next paycheck is about Nov 1 ($1,646 net). Settle the car loan this week before you move more money into Cancun.",
-  cash:{checking:701.75,business:43.80,savings:5386.16},
+  updated:"Oct 20, 2026",
+  status:"yellow",
+  headline:"Spending break until the Nov 1 paycheck.",
+  sub:"Cash and savings total $5,921.61. Checking is $491.65 after a heavy spending day (about $200 on Oct 19). Stick to essentials until your next paycheck (about Nov 1, $1,646 net). Rent is $600 that day. You are still on track as long as the car total stays at $900 or under.",
+  cash:{checking:491.65,business:43.80,savings:5386.16},
   cards:9.89,
   payday:{label:"About Nov 1",est:1646.15,note:"net, bi-weekly"},
-  weekSpend:150,
+  weekSpend:100,
   payout:{
     total:5770.33,
     items:[
@@ -405,13 +405,13 @@ var WEEK={
   plan:[
     {d:"Done",t:"Paycheck landed ($1,646.15 net, in 01 Primary Savings). Car insurance paid Oct 19. Manny and the Mastercard are paid off."},
     {d:"This week",t:"Get paper loan quotes on 3 Model 3s, mom co-signing, aiming for about 12% APR. Sleep on it, then bring me the numbers. Keep total car cost at $850-$900."},
-    {d:"Today",t:"Pay your friend back for Saturday's dinner (about $20) by Zelle from Main Checking.",a:20},
+    {d:"Now",t:"Spending break. Essentials only (groceries, gas, charging) until the paycheck, about $100 a week. No more eating out.",a:100},
     {d:"Soon",t:"Pay the last $9.89 on the Schools First Mastercard.",a:9.89},
-    {d:"Before Nov 14",t:"Move $50 from Main Checking to Business Checking for the subscriptions and $20 of extra Claude usage.",a:50},
+    {d:"After the paycheck",t:"Move $50 from Main Checking to Business Checking for the subscriptions and $20 of extra Claude usage.",a:50},
     {d:"Nov 1",t:"Rent. Paycheck lands about the same day. If it is late, pull from 01 Primary Savings above $2,000, not from the Car Fund.",a:600},
     {d:"After the car is settled",t:"Move $500-600 into 03 Cancun Savings, then book the Airbnb."},
     {d:"Soon",t:"Call EOS Fitness to fix the $24.99 charge to $9.99, then put it on Capital One."},
-    {d:"Spend",t:"Groceries, gas and food this week, about $150, on your debit card. Belts (up to $30) are fine now that the paycheck landed.",a:150},
+    {d:"Spend",t:"Groceries and gas only, about $100 a week, on your debit card. Belts (up to $30) can wait for the Nov 1 paycheck.",a:150},
     {d:"Maybe",t:"New Google Ads client, about $300+ a month. Don't count it until the contract is signed."}
   ],
   pay:[
